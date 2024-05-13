@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/black"
+        android:layout_height="match_parent">
+
+
+        <ImageButton
+            android:id="@+id/Pausa"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="484dp"
+            android:contentDescription="@string/boton_de_pausa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_media_pause"
+            tools:ignore="DuplicateIds" />
+
+        <ImageButton
+            android:id="@+id/Iniciar"
+            android:layout_width="78dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="164dp"
+            android:layout_marginTop="484dp"
+            android:contentDescription="@string/boton_de_iniciado"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_media_play" />
+
+        <ImageButton
+            android:id="@+id/Detener"
+            android:layout_width="66dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="284dp"
+            android:layout_marginTop="484dp"
+            android:contentDescription="@string/boton_de_detener"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/picture_frame" />
+
+        <ImageView
+            android:id="@+id/tomate"
+            android:layout_width="375dp"
+            android:layout_height="287dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="160dp"
+            android:contentDescription="@string/imagen_pomodoro"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/tomate"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

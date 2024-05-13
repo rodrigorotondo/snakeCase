@@ -6,7 +6,6 @@ data class Pomodoro(private var tipoTimer: TipoTimer) {
     private var segundosRestantes = 0
     private var pausa = false
 
-
     fun obtenerTipoTimer(): TipoTimer {
         return tipoTimer
     }
