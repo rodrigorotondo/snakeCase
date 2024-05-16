@@ -76,13 +76,13 @@ fun crear_botones(context: Context) {
         }
     }
 
-    fun pausarTimer() {
-        timerActivo = false
+    fun toggleTimer() {
+        timerActivo = !timerActivo
     }
 
     fun reiniciarTimer() {
-        tiempo = 1500 // Reiniciar a 25 minutos
-        timerActivo = true
+        tiempo = 1500 // =25 minutos
+        timerActivo = false
     }
 
     val minutos = tiempo / 60
@@ -91,18 +91,15 @@ fun crear_botones(context: Context) {
 
     Text(text = tiempoFormateado)
 
+    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+        crearBoton(context = context, estado = if (timerActivo) "Pausado" else "Iniciado", id_imagen = if (timerActivo) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play, descripcion = "Botón de Play/Pausa", onClick = {
+            toggleTimer()
+        })
 
-    crearBoton(context = context, estado = "Pausado", id_imagen = android.R.drawable.ic_media_pause, descripcion = "Boton de Pausa", onClick = {
-        pausarTimer()
-    })
-
-    crearBoton(context = context, estado = "Iniciado", id_imagen = android.R.drawable.ic_media_play, descripcion = "Boton de Play", onClick = {
-        timerActivo = true
-    })
-
-    crearBoton(context = context, estado = "Reiniciado", id_imagen = android.R.drawable.ic_media_previous, descripcion = "Boton de Reiniciado", onClick = {
-        reiniciarTimer()
-    })
+        crearBoton(context = context, estado = "Reiniciado", id_imagen = android.R.drawable.ic_media_previous, descripcion = "Botón de Reiniciar", onClick = {
+            reiniciarTimer()
+        })
+    }
 }
 @Composable
 fun CrearImagenTomate() {
