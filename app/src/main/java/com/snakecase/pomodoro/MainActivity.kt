@@ -31,7 +31,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 data class ColorVentana(private var color : Color) {
 
 
@@ -45,25 +48,61 @@ data class ColorVentana(private var color : Color) {
 }
 
 @Composable
-fun crearBoton(context : Context, estado : String, id_imagen : Int, descripcion : String) {
+fun crearBoton(context: Context, estado: String, id_imagen: Int, descripcion: String, onClick: () -> Unit) {
     Spacer(modifier = Modifier.width(64.dp))
     IconButton(
-        onClick = { Toast.makeText(context, estado, Toast.LENGTH_SHORT).show()},
+        onClick = {
+            onClick()
+            Toast.makeText(context, estado, Toast.LENGTH_SHORT).show()
+        },
         modifier = Modifier.padding(top = 500.dp),
     ) {
-        Image(painter = painterResource(id = id_imagen), contentDescription = descripcion )
+        Image(painter = painterResource(id = id_imagen), contentDescription = descripcion)
     }
-
 }
 @Composable
-fun crear_botones(context : Context) {
+fun crear_botones(context: Context) {
+    var tiempo by remember { mutableStateOf(1500) }
+    var timerActivo by remember { mutableStateOf(false) }
 
-    crearBoton(context = context, estado = "Pausado", id_imagen = android.R.drawable.ic_media_pause, descripcion = "Boton de Pausa")
+    LaunchedEffect(timerActivo) {
+        if (timerActivo) {
+            while (tiempo > 0) {
+                delay(1000)
+                withContext(Dispatchers.Main) {
+                    tiempo--
+                }
+            }
+        }
+    }
 
-    crearBoton(context = context, estado = "Iniciado", id_imagen = android.R.drawable.ic_media_play, descripcion = "Boton de Play")
+    fun pausarTimer() {
+        timerActivo = false
+    }
 
-    crearBoton(context = context, estado = "Reiniciado", id_imagen = android.R.drawable.ic_media_previous, descripcion = "Boton de Reiniciado")
+    fun reiniciarTimer() {
+        tiempo = 1500 // Reiniciar a 25 minutos
+        timerActivo = true
+    }
 
+    val minutos = tiempo / 60
+    val segundos = tiempo % 60
+    val tiempoFormateado = String.format("%02d:%02d", minutos, segundos)
+
+    Text(text = tiempoFormateado)
+
+
+    crearBoton(context = context, estado = "Pausado", id_imagen = android.R.drawable.ic_media_pause, descripcion = "Boton de Pausa", onClick = {
+        pausarTimer()
+    })
+
+    crearBoton(context = context, estado = "Iniciado", id_imagen = android.R.drawable.ic_media_play, descripcion = "Boton de Play", onClick = {
+        timerActivo = true
+    })
+
+    crearBoton(context = context, estado = "Reiniciado", id_imagen = android.R.drawable.ic_media_previous, descripcion = "Boton de Reiniciado", onClick = {
+        reiniciarTimer()
+    })
 }
 @Composable
 fun CrearImagenTomate() {
