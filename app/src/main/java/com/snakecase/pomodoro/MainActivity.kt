@@ -1,40 +1,185 @@
 package com.snakecase.pomodoro
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.snakecase.pomodoro.ui.theme.PomodoroTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
-class MainActivity : ComponentActivity() {
+data class ColorVentana(private var color : Color) {
 
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_main)
-        val imageButtonPausa = findViewById<ImageButton>(R.id.Pausa)
-        imageButtonPausa.setOnClickListener {
-            Toast.makeText(this, "Pausando Pomodoro", Toast.LENGTH_SHORT).show()
-        }
-        val imageButtonIniciar = findViewById<ImageButton>(R.id.Iniciar)
-        imageButtonIniciar.setOnClickListener {
-            Toast.makeText(this, "Reanudando Pomodoro", Toast.LENGTH_SHORT).show()
-        }
-        val imageButtonDetener = findViewById<ImageButton>(R.id.Detener)
-        imageButtonDetener.setOnClickListener {
-            Toast.makeText(this, "Deteniendo Pomodoro", Toast.LENGTH_SHORT).show()
+
+    fun setColor(nuevoColor : Color){
+        color = nuevoColor
+    }
+
+    fun getColor() : Color {
+        return color
+    }
+}
+
+@Composable
+fun crearBoton(context : Context, estado : String, id_imagen : Int, descripcion : String) {
+    Spacer(modifier = Modifier.width(64.dp))
+    IconButton(
+        onClick = { Toast.makeText(context, estado, Toast.LENGTH_SHORT).show()},
+        modifier = Modifier.padding(top = 500.dp),
+    ) {
+        Image(painter = painterResource(id = id_imagen), contentDescription = descripcion )
+    }
+
+}
+@Composable
+fun crear_botones(context : Context) {
+
+    crearBoton(context = context, estado = "Pausado", id_imagen = android.R.drawable.ic_media_pause, descripcion = "Boton de Pausa")
+
+    crearBoton(context = context, estado = "Iniciado", id_imagen = android.R.drawable.ic_media_play, descripcion = "Boton de Play")
+
+    crearBoton(context = context, estado = "Reiniciado", id_imagen = android.R.drawable.ic_media_previous, descripcion = "Boton de Reiniciado")
+
+}
+@Composable
+fun CrearImagenTomate() {
+    Image(
+        painter = painterResource(id = R.drawable.tomate),
+        contentDescription = "Tomate",
+        modifier = Modifier.size(700.dp)
+    )
+
+}
+
+@Composable
+fun crearBotonColor(onNavigateBack: () -> Unit, colorVentana : ColorVentana, color : Color, stringColor : String) {
+
+    Button(onClick = {
+        onNavigateBack()
+        colorVentana.setColor(color)
+    }) {
+        Text(text = stringColor)
+    }
+
+}
+
+@Composable
+fun crearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana){
+
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Red, stringColor = "Rojo")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Blue, stringColor = "Azul")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Yellow, stringColor = "Amarillo")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Gray, stringColor = "Gris")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.White, stringColor = "Blanco")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Black, stringColor = "Negro")
+    crearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = colorVentana.getColor(), stringColor = "Volver")
+
+
+}
+
+
+@Composable
+fun pantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana : ColorVentana) {
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Configuracion")
+        Spacer(modifier = Modifier.height(20.dp))
+
+        crearBotonesColores(onNavigateBack = onNavigateBack, colorVentana = colorVentana)
+    }
+
+
+}
+
+@Composable
+fun CrearBotonConfiguracion(context: Context, onNavigate: () -> Unit) {
+    
+    IconButton(onClick =  onNavigate ,
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .offset(x = 320.dp)) {
+        Image(painter = painterResource(id = R.drawable.configuracion), contentDescription = "Imagen de Configuracion")
+        
+    }
+
+}
+
+@Composable
+fun pantallaPrincipal(onNavigate: () -> Unit, colorVentana : ColorVentana) {
+    PomodoroTheme {
+        val context = LocalContext.current
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .background(color = colorVentana.getColor())) {
+                CrearBotonConfiguracion(context, onNavigate)
+                CrearImagenTomate()
+                Row(){
+                    crear_botones(context)
+                }
+
+            }
         }
 
     }
+
+
+
 }
+
+
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        var colorVentana = ColorVentana(Color.Red)
+        setContent {
+
+            var pantallaActual by remember { mutableStateOf("main") }
+
+            when (pantallaActual) {
+                "main" -> pantallaPrincipal(onNavigate = {pantallaActual = "second"}, colorVentana)
+                "second" ->pantallaConfiguracion(onNavigateBack = { pantallaActual = "main"}, colorVentana)
+            }
+
+
+        }
+
+
+    }
+
+    
+
+}
+
