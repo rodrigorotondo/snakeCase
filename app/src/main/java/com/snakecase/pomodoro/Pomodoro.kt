@@ -1,10 +1,16 @@
 package com.snakecase.pomodoro
 
 data class Pomodoro(private var tipoTimer: TipoTimer) {
+
     private var ciclos = 0
     var minutosRestantes = tipoTimer.minutos
     var segundosRestantes = 0
     private var pausa = true
+
+    var cicloConteo = 4
+    var estudioTime = 25
+    var descansoTime = 5
+    var descansoLargoTime = 20
 
     fun obtenerTipoTimer(): TipoTimer {
         return tipoTimer
@@ -73,5 +79,26 @@ data class Pomodoro(private var tipoTimer: TipoTimer) {
     fun setearMinutos(minutos: Int) {
         this.minutosRestantes = minutos
 
+    }
+    fun updateFocusCount(nuevoConteo: Int) {
+        if (nuevoConteo in 1..12) {
+            cicloConteo = nuevoConteo
+        }
+    }
+    fun updateFocusTime(nuevoTime: Int) {
+        if (nuevoTime in 5..120) {
+            estudioTime = nuevoTime
+        }
+    }
+
+    fun updateBreakTime(nuevoTime: Int) {
+        if (nuevoTime in 5..60) {
+            descansoTime = nuevoTime
+        }
+    }
+    fun updateLongBreakTime(nuevoTime: Int) {
+        if (nuevoTime in 5..60) {
+            descansoLargoTime = nuevoTime
+        }
     }
 }
