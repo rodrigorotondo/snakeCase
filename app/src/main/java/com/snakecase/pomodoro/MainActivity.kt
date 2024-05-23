@@ -177,17 +177,34 @@ fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana)
 }*/
 @Composable
 fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana: ColorVentana) {
-    val colores = listOf(Color.Red, Color.Blue, Color.Yellow, Color.Gray, Color.White, Color.Black)
+    val colores = listOf(
+        Color(0xFFE57373), // Light Red
+        Color(0xFF81C784), // Light Green
+        Color(0xFF64B5F6), // Light Blue
+        Color(0xFFFFD54F), // Light Yellow
+        Color(0xFF9575CD), // Light Purple
+        Color(0xFFFFB74D), // Light Orange
+        Color(0xFF4DB6AC), // Teal
+        Color(0xFF7986CB), // Indigo
+        Color(0xFF4DD0E1), // Cyan
+        Color(0xFFAED581), // Light Green
+        Color(0xFF9575CD), // Light Purple
+        Color(0xFF64B5F6)  // Light Blue
+    )
     Column {
-        colores.forEach { color ->
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(color)
-                    .clickable {
-                        colorVentana.setColor(color)
-                    }
-            )
+        colores.chunked(2).forEach { rowColors ->
+            Row {
+                rowColors.forEach { color ->
+                    Box(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .background(color)
+                            .clickable {
+                                colorVentana.setColor(color)
+                            }
+                    )
+                }
+            }
         }
     }
 }
@@ -241,6 +258,7 @@ fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana
     }
 }
 
+
 @Composable
 fun CrearBotonConfiguracion(context: Context, onNavigate: () -> Unit) {
 
@@ -273,11 +291,7 @@ fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana : ColorVentana, pomod
         }
 
     }
-
-
-
 }
-
 
 class MainActivity : ComponentActivity() {
 
