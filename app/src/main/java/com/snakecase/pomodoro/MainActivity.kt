@@ -150,7 +150,7 @@ fun CrearImagenTomate() {
 
 }
 
-@Composable
+/*@Composable
 fun CrearBotonColor(onNavigateBack: () -> Unit, colorVentana : ColorVentana, color : Color, stringColor : String) {
 
     Button(onClick = {
@@ -162,7 +162,7 @@ fun CrearBotonColor(onNavigateBack: () -> Unit, colorVentana : ColorVentana, col
 
 }
 
-/*@Composable
+@Composable
 fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana){
 
     CrearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Red, stringColor = "Rojo")
@@ -176,33 +176,33 @@ fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana)
 
 }*/
 @Composable
-fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana: ColorVentana) {
+fun CrearBotonesColores(onColorSelected: (Color) -> Unit) {
     val colores = listOf(
-        Color(0xFFE57373), // Light Red
-        Color(0xFF81C784), // Light Green
-        Color(0xFF64B5F6), // Light Blue
-        Color(0xFFFFD54F), // Light Yellow
-        Color(0xFF9575CD), // Light Purple
-        Color(0xFFFFB74D), // Light Orange
-        Color(0xFF4DB6AC), // Teal
-        Color(0xFF7986CB), // Indigo
-        Color(0xFF4DD0E1), // Cyan
-        Color(0xFFAED581), // Light Green
-        Color(0xFF9575CD), // Light Purple
-        Color(0xFF64B5F6)  // Light Blue
+        Color(0xFFE57373), Color(0xFF81C784), Color(0xFFFFC0CB), Color(0xFFFFD54F),
+        Color(0xFFE6CCFF), Color(0xFFFFB74D), Color(0xFF4DB6AC), Color(0xFF7986CB),
+        Color(0xFF4DD0E1), Color(0xFFAED581), Color(0xFF9575CD), Color(0xFF64B5F6)
     )
+
+    var selectedColor by remember { mutableStateOf<Color?>(null) }
+
     Column {
-        colores.chunked(2).forEach { rowColors ->
+        repeat(4) { rowIndex ->
             Row {
-                rowColors.forEach { color ->
+                repeat(3) { colIndex ->
+                    val colorIndex = rowIndex * 3 + colIndex
                     Box(
                         modifier = Modifier
                             .size(50.dp)
-                            .background(color)
+                            .background(colores[colorIndex])
                             .clickable {
-                                colorVentana.setColor(color)
+                                selectedColor = colores[colorIndex]
+                                onColorSelected(colores[colorIndex])
                             }
-                    )
+                    ) {
+                        if (selectedColor == colores[colorIndex]) {
+                            Text("✔️", color = Color.White, modifier = Modifier.align(Alignment.Center))
+                        }
+                    }
                 }
             }
         }
@@ -225,38 +225,6 @@ fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit,
     }
 }
 
-@Composable
-fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro) {
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Configuracion")
-        Spacer(modifier = Modifier.height(20.dp))
-        ConfigSlider("Ciclos", pomodoro.cicloConteo, pomodoro::updateFocusCount, 1..12, 1)
-        ConfigSlider("Estudio Time", pomodoro.estudioTime, pomodoro::updateFocusTime, 5..120, 5)
-        ConfigSlider("Descanso Time", pomodoro.descansoTime, pomodoro::updateBreakTime, 5..60, 5)
-        ConfigSlider("Descanso Largo Time", pomodoro.descansoLargoTime, pomodoro::updateLongBreakTime, 5..60, 5)
-
-        Row {
-            Text("Color seleccionado: ", modifier = Modifier.padding(8.dp))
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(colorVentana.getColor())
-            )
-        }
-
-        CrearBotonesColores(onNavigateBack = onNavigateBack, colorVentana = colorVentana)
-
-        Button(onClick = onNavigateBack) {
-            Text("Guardar y Volver")
-        }
-    }
-}
 
 
 @Composable
@@ -273,9 +241,32 @@ fun CrearBotonConfiguracion(context: Context, onNavigate: () -> Unit) {
 }
 
 
-
 @Composable
-fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana : ColorVentana, pomodoro: Pomodoro) {
+fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro, onColorSelected: (Color) -> Unit) {
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Configuracion")
+        Spacer(modifier = Modifier.height(20.dp))
+        ConfigSlider("Ciclos", pomodoro.cicloConteo, pomodoro::updateFocusCount, 1..12, 1)
+        ConfigSlider("Estudio Time", pomodoro.estudioTime, pomodoro::updateFocusTime, 5..120, 5)
+        ConfigSlider("Descanso Time", pomodoro.descansoTime, pomodoro::updateBreakTime, 5..60, 5)
+        ConfigSlider("Descanso Largo Time", pomodoro.descansoLargoTime, pomodoro::updateLongBreakTime, 5..60, 5)
+
+
+        CrearBotonesColores(onColorSelected)
+
+        Button(onClick = onNavigateBack) {
+            Text("Guardar y Volver")
+        }
+    }
+}
+@Composable
+fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro, onColorSelected: (Color) -> Unit) {
     PomodoroTheme {
         val context = LocalContext.current
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
@@ -286,12 +277,12 @@ fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana : ColorVentana, pomod
                 CrearBotonConfiguracion(context, onNavigate)
                 CrearImagenTomate()
                 CrearBotones(context, pomodoro)
-
             }
         }
-
     }
 }
+
+
 
 class MainActivity : ComponentActivity() {
 
@@ -303,19 +294,19 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             var pantallaActual by remember { mutableStateOf("main") }
+            var colorSeleccionado by remember { mutableStateOf(Color.Red) }
 
             when (pantallaActual) {
-                "main" -> PantallaPrincipal(onNavigate = {pantallaActual = "second"}, colorVentana, timerPomodoro)
-                "second" ->PantallaConfiguracion(onNavigateBack = { pantallaActual = "main"}, colorVentana, timerPomodoro)
+                "main" -> PantallaPrincipal(onNavigate = {pantallaActual = "second"}, colorVentana, timerPomodoro) {
+                    colorVentana.setColor(it)
+                    colorSeleccionado = it
+                }
+                "second" -> PantallaConfiguracion(onNavigateBack = { pantallaActual = "main"}, colorVentana, timerPomodoro) {
+                    colorVentana.setColor(it)
+                    colorSeleccionado = it
+                }
             }
-
-
         }
-
-
     }
-
-
-
 }
 
