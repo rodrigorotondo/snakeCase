@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -161,7 +162,7 @@ fun CrearBotonColor(onNavigateBack: () -> Unit, colorVentana : ColorVentana, col
 
 }
 
-@Composable
+/*@Composable
 fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana){
 
     CrearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = Color.Red, stringColor = "Rojo")
@@ -173,8 +174,23 @@ fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana : ColorVentana)
     //CrearBotonColor(onNavigateBack = onNavigateBack, colorVentana = colorVentana, color = colorVentana.getColor(), stringColor = "Volver")
 
 
+}*/
+@Composable
+fun CrearBotonesColores(onNavigateBack: () -> Unit, colorVentana: ColorVentana) {
+    val colores = listOf(Color.Red, Color.Blue, Color.Yellow, Color.Gray, Color.White, Color.Black)
+    Column {
+        colores.forEach { color ->
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(color)
+                    .clickable {
+                        colorVentana.setColor(color)
+                    }
+            )
+        }
+    }
 }
-
 @Composable
 fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit, range: IntRange, step: Int) {
     var value by remember { mutableStateOf(initialValue) }
@@ -191,8 +207,9 @@ fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit,
         )
     }
 }
+
 @Composable
-fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana : ColorVentana, pomodoro: Pomodoro) {
+fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro) {
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -206,13 +223,22 @@ fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana : ColorVentan
         ConfigSlider("Estudio Time", pomodoro.estudioTime, pomodoro::updateFocusTime, 5..120, 5)
         ConfigSlider("Descanso Time", pomodoro.descansoTime, pomodoro::updateBreakTime, 5..60, 5)
         ConfigSlider("Descanso Largo Time", pomodoro.descansoLargoTime, pomodoro::updateLongBreakTime, 5..60, 5)
+
+        Row {
+            Text("Color seleccionado: ", modifier = Modifier.padding(8.dp))
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(colorVentana.getColor())
+            )
+        }
+
         CrearBotonesColores(onNavigateBack = onNavigateBack, colorVentana = colorVentana)
+
         Button(onClick = onNavigateBack) {
             Text("Guardar y Volver")
         }
     }
-
-
 }
 
 @Composable
