@@ -242,8 +242,8 @@ fun CrearBotonConfiguracion(context: Context, onNavigate: () -> Unit) {
 
 
 @Composable
-fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro, onColorSelected: (Color) -> Unit) {
-    Column (
+fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro) {
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -257,23 +257,32 @@ fun PantallaConfiguracion(onNavigateBack: () -> Unit, colorVentana: ColorVentana
         ConfigSlider("Descanso Time", pomodoro.descansoTime, pomodoro::updateBreakTime, 5..60, 5)
         ConfigSlider("Descanso Largo Time", pomodoro.descansoLargoTime, pomodoro::updateLongBreakTime, 5..60, 5)
 
-
-        CrearBotonesColores(onColorSelected)
+        CrearBotonesColores { color ->
+            colorVentana.setColor(color)
+        }
 
         Button(onClick = onNavigateBack) {
             Text("Guardar y Volver")
         }
     }
 }
+
+
+
 @Composable
-fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro, onColorSelected: (Color) -> Unit) {
+fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana: ColorVentana, pomodoro: Pomodoro) {
     PomodoroTheme {
         val context = LocalContext.current
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .background(color = colorVentana.getColor())) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = colorVentana.getColor())
+            ) {
                 CrearBotonConfiguracion(context, onNavigate)
                 CrearImagenTomate()
                 CrearBotones(context, pomodoro)
@@ -285,28 +294,20 @@ fun PantallaPrincipal(onNavigate: () -> Unit, colorVentana: ColorVentana, pomodo
 
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val colorVentana = ColorVentana(Color.Red)
         val timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
         setContent {
-
             var pantallaActual by remember { mutableStateOf("main") }
-            var colorSeleccionado by remember { mutableStateOf(Color.Red) }
 
             when (pantallaActual) {
-                "main" -> PantallaPrincipal(onNavigate = {pantallaActual = "second"}, colorVentana, timerPomodoro) {
-                    colorVentana.setColor(it)
-                    colorSeleccionado = it
-                }
-                "second" -> PantallaConfiguracion(onNavigateBack = { pantallaActual = "main"}, colorVentana, timerPomodoro) {
-                    colorVentana.setColor(it)
-                    colorSeleccionado = it
-                }
+                "main" -> PantallaPrincipal(onNavigate = { pantallaActual = "second" }, colorVentana, timerPomodoro)
+                "second" -> PantallaConfiguracion(onNavigateBack = { pantallaActual = "main" }, colorVentana, timerPomodoro)
             }
         }
     }
 }
+
 
