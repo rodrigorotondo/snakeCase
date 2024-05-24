@@ -1,7 +1,9 @@
 package com.snakecase
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 
 class DataBaseManager(nombreUsuario:String) {
@@ -11,8 +13,7 @@ class DataBaseManager(nombreUsuario:String) {
         val actualizacion= hashMapOf(
             "ciclos" to FieldValue.increment(1)
         )
-        DB.update(actualizacion as Map<String, Any>)
+        DB.set(actualizacion, SetOptions.merge())
     }
-
 
 }
