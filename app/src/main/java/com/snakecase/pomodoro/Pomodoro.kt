@@ -1,5 +1,5 @@
 package com.snakecase.pomodoro
-
+import com.snakecase.DataBaseManager
 data class Pomodoro(private var tipoTimer: TipoTimer) {
     private var ciclos = 0
     var minutosRestantes = tipoTimer.minutos
@@ -27,6 +27,8 @@ data class Pomodoro(private var tipoTimer: TipoTimer) {
 
     fun incrementarCiclo() {
         ciclos = ciclos + 1
+        val DBManager = DataBaseManager("usuario")
+        DBManager.incrementarCiclos()
     }
 
 
