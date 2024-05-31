@@ -199,10 +199,10 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun crearBotonModoObscuro() {
+    fun crearBotonModoOscuro() {
 
         var activado by remember { mutableStateOf(false)}
-        
+
         Spacer(modifier = Modifier.size(30.dp))
         if (!activado) {
             Button(onClick = {
@@ -210,7 +210,7 @@ class AplicacionPomodoro {
                 colorVentanaConfiguracion.setColorVentana(Color.Black)
                 activado = true
             }, shape = RectangleShape, modifier = Modifier.offset(x = 5.dp)) {
-                Text("Modo Obscuro                                                      >>", style = TextStyle(fontSize = 15.sp))
+                Text("Modo Oscuro                                                      >>", style = TextStyle(fontSize = 15.sp))
             }
         }
         if (activado) {
@@ -220,7 +220,7 @@ class AplicacionPomodoro {
                 activado = false
             }, shape = RectangleShape, modifier = Modifier.offset(x = 5.dp)) {
 
-                Text("Modo Obscuro                                                      >>", style = TextStyle(fontSize = 15.sp))
+                Text("Modo Oscuro                                                      >>", style = TextStyle(fontSize = 15.sp))
 
             }
 
@@ -280,7 +280,7 @@ class AplicacionPomodoro {
     fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit, range: IntRange, step: Int) {
         var value by remember { mutableStateOf(initialValue) }
         Column {
-            Text(text = "$label: $value")
+            Text(text = "$label: $value", color = colorTexto.getColorTexto()) // Update text color here
             Slider(
                 value = value.toFloat(),
                 onValueChange = { newValue ->
@@ -315,7 +315,7 @@ class AplicacionPomodoro {
             .background(color = colorVentanaConfiguracion.getColorVentana()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
+        ) {
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Button(onClick = {navController.navigate("pantallaConfiguracion")}, colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
                     modifier = Modifier.offset(x = -15.dp, y = -145.dp)) {
@@ -326,12 +326,12 @@ class AplicacionPomodoro {
                     .padding(8.dp)
                     .offset(x = 0.dp, y = -100.dp)) {
                     modificarBrilloAplicacion()
-                    crearBotonModoObscuro()
+                    crearBotonModoOscuro()
                 }
             }
 
 
-            Text("Color de Fonodo del Pomodoro", color = colorTexto.getColorTexto())
+            Text("Color de Fondo del Pomodoro", color = colorTexto.getColorTexto())
             CrearBotonesColores { color ->
                 colorVentana.setColorVentana(color)
             }
