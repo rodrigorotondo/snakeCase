@@ -124,7 +124,11 @@ fun CrearBotones(context: Context, pomodoro: Pomodoro) {
     val tiempoFormateado = String.format("%02d:%02d", minutos, segundos)
 
     Box {
-        Text(text = tiempoFormateado, fontSize = 70.sp, modifier = Modifier.fillMaxSize().align(Alignment.Center).padding(100.dp).padding(top = 230.dp))
+        Text(text = tiempoFormateado, fontSize = 70.sp, modifier = Modifier
+            .fillMaxSize()
+            .align(Alignment.Center)
+            .padding(100.dp)
+            .padding(top = 230.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(50.dp))
             CrearBoton(context = context, estado = if (timerActivo) "Pausado" else "Iniciado", idImagen = if (timerActivo) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play, descripcion = "Botón de Play/Pausa", onClick = {
@@ -240,9 +244,10 @@ class MainActivity : ComponentActivity() {
         val timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
         setContent {
 
-            var pantallaActual by remember { mutableStateOf("main") }
+            var pantallaActual by remember { mutableStateOf("login") }
 
             when (pantallaActual) {
+                "login" -> PantallaLogin(onNavigate = {pantallaActual = "main"})
                 "main" -> PantallaPrincipal(onNavigate = {pantallaActual = "second"}, colorVentana, timerPomodoro)
                 "second" ->PantallaConfiguracion(onNavigateBack = { pantallaActual = "main"}, colorVentana)
             }

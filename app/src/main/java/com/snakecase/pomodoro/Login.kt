@@ -19,21 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 
-@Preview(showBackground = true, showSystemUi = true)
+
 @Composable
-fun PantallaLogin(){
+fun PantallaLogin(onNavigate: () -> Unit ){
     val viewModel = LoginViewModel()
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Login(Modifier.align(Alignment.Center),viewModel)
+        Login(Modifier.align(Alignment.Center),viewModel,onNavigate)
     }
 
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel){
+fun Login(modifier: Modifier, viewModel: LoginViewModel, onNavigate: () -> Unit){
     val email: String by viewModel.email.observeAsState(initial="")
     val contrasenia: String by viewModel.contrasenia.observeAsState(initial="")
     val permitirLogin: Boolean by viewModel.permitirLogin.observeAsState(initial = false)
@@ -43,7 +43,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel){
         Spacer(modifier = Modifier.padding(6.dp))
         CampoContrasenia(contrasenia) { viewModel.cambioEnCampos(email, it) }
         Spacer(modifier = Modifier.padding(6.dp))
-        BotonLogin(permitirLogin) {viewModel.iniciarSesion()}
+        BotonLogin(permitirLogin) {viewModel.iniciarSesion(onNavigate)}
     }
 }
 
