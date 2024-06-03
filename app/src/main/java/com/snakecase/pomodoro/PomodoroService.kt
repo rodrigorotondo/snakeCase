@@ -29,20 +29,24 @@ class PomodoroService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        createNotificationChannel()
         startForeground(1, createInitialNotification())
     }
 
-    private fun createInitialNotification(): Notification {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+    private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "pomodoro_channel",
                 "Pomodoro Timer",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+    }
+
+    private fun createInitialNotification(): Notification {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
@@ -55,7 +59,7 @@ class PomodoroService : Service() {
         return NotificationCompat.Builder(this, "pomodoro_channel")
             .setContentTitle("Pomodoro Timer")
             .setContentText("Timer iniciado")
-            .setSmallIcon(R.drawable.icono_app)
+            .setSmallIcon(R.drawable.icono_app) // Replace with your app's icon
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .build()
@@ -75,17 +79,6 @@ class PomodoroService : Service() {
     }
 
     private fun updateNotification() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "pomodoro_channel",
-                "Pomodoro Timer",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this,
@@ -97,11 +90,12 @@ class PomodoroService : Service() {
         val notification = NotificationCompat.Builder(this, "pomodoro_channel")
             .setContentTitle("Pomodoro Timer")
             .setContentText("Tiempo restante: ${remainingTime / 1000} segundos")
-            .setSmallIcon(R.drawable.icono_app)
+            .setSmallIcon(R.drawable.icono_app) // Replace with your app's icon
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .build()
 
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(1, notification)
     }
 
