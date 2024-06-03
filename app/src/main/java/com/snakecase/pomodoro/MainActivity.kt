@@ -17,6 +17,8 @@ class MainActivity : ComponentActivity() {
     private var pomodoroService: PomodoroService? = null
     private var isBound = false
 
+    private val PERMISSION_REQUEST_CODE = 123
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as PomodoroService.LocalBinder
@@ -36,16 +38,29 @@ class MainActivity : ComponentActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 123)
+                requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), PERMISSION_REQUEST_CODE)
+            } else {
+                bindPomodoroService()
             }
+        } else {
+            bindPomodoroService()
         }
-
-        val intent = Intent(this, PomodoroService::class.java)
-        bindService(intent, connection, Context.BIND_AUTO_CREATE)
 
         setContent {
             aplicacion.ejecutarAplicacion(savedInstanceState = savedInstanceState)
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            bindPomodoroService()
+        }
+    }
+
+    private fun bindPomodoroService() {
+        val intent = Intent(this, PomodoroService::class.java)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
@@ -62,4 +77,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
