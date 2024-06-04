@@ -20,22 +20,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 
 
 @Composable
-fun PantallaLogin(onNavigate: () -> Unit ){
+fun PantallaLogin(navController : NavHostController){
     val viewModel = LoginViewModel()
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)) {
-        Login(Modifier.align(Alignment.Center),viewModel,onNavigate)
+        Login(Modifier.align(Alignment.Center),viewModel,navController)
     }
 
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel, onNavigate: () -> Unit){
+fun Login(modifier: Modifier, viewModel: LoginViewModel, navController : NavHostController){
     val email: String by viewModel.email.observeAsState(initial="")
     val contrasenia: String by viewModel.contrasenia.observeAsState(initial="")
     val permitirLogin: Boolean by viewModel.permitirLogin.observeAsState(initial = false)
@@ -45,9 +46,9 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, onNavigate: () -> Unit)
         Spacer(modifier = Modifier.padding(6.dp))
         CampoContrasenia(contrasenia) { viewModel.cambioEnCampos(email, it) }
         Spacer(modifier = Modifier.padding(6.dp))
-        BotonLogin(permitirLogin) {viewModel.iniciarSesion(onNavigate)}
+        BotonLogin(permitirLogin) {viewModel.iniciarSesion(navController)}
         Spacer(modifier = Modifier.padding(6.dp))
-        registrate{ PantallaRegistrarUsuario {onNavigate}}
+        Registrate(navController)
     }
 }
 
@@ -85,11 +86,11 @@ fun BotonLogin(permitirLogin: Boolean, iniciarSesion:() -> Unit ){
 }
 
 @Composable
-fun Registrate( onClick: () -> Unit){
+fun Registrate( navController : NavHostController){
     TextButton(
-        onClick= { onClick() }
+        onClick= { navController.navigate("registrarUsuario") }
     ){
-        Text("no tenes cuenta? Registrate aca")
+        Text("¿no tenes cuenta? Registrate aca")
         }
 
 } 

@@ -4,8 +4,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +52,11 @@ import com.snakecase.pomodoro.ui.theme.PomodoroTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.timer
 
 
 data class ColorVentana(private var colorConstructor : Color) {
 
-    var color by mutableStateOf(colorConstructor)
+    private var color by mutableStateOf(colorConstructor)
 
     fun setColorVentana(nuevoColor : Color){
         color = nuevoColor
@@ -72,7 +69,7 @@ data class ColorVentana(private var colorConstructor : Color) {
 
 data class BrilloVentana(var valor : Float) {
 
-    var brillo by  mutableStateOf(valor)
+    private var brillo by  mutableFloatStateOf(valor)
 
     fun setBrillos(nuevoBrillo : Float){
         brillo = nuevoBrillo
@@ -98,11 +95,11 @@ data class ColorTexto(private var colorTexto : Color) {
 
 class AplicacionPomodoro {
 
-    val colorVentana = ColorVentana(Color.Red)
-    val brilloVentana = BrilloVentana(1F)
-    val timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
-    val colorTexto = ColorTexto(Color.Black)
-    val colorVentanaConfiguracion = ColorVentana(Color.White)
+    private val colorVentana = ColorVentana(Color.Red)
+    private val brilloVentana = BrilloVentana(1F)
+    private val timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
+    private val colorTexto = ColorTexto(Color.Black)
+    private val colorVentanaConfiguracion = ColorVentana(Color.White)
 
     @Composable
     fun CrearBoton(context: Context, estado: String, idImagen: Int, descripcion: String, onClick: () -> Unit) {
@@ -199,7 +196,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun crearBotonModoOscuro() {
+    fun CrearBotonModoOscuro() {
 
         var activado by remember { mutableStateOf(false)}
 
@@ -229,7 +226,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun modificarBrilloAplicacion() {
+    fun ModificarBrilloAplicacion() {
 
 
 
@@ -278,7 +275,7 @@ class AplicacionPomodoro {
 
     @Composable
     fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit, range: IntRange, step: Int) {
-        var value by remember { mutableStateOf(initialValue) }
+        var value by remember { mutableIntStateOf(initialValue) }
         Column {
             Text(text = "$label: $value", color = colorTexto.getColorTexto()) // Update text color here
             Slider(
@@ -318,15 +315,15 @@ class AplicacionPomodoro {
         ) {
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Button(onClick = {navController.navigate("pantallaConfiguracion")}, colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
-                    modifier = Modifier.offset(x = -15.dp, y = -145.dp)) {
+                    modifier = Modifier.offset(x = (-15).dp, y = (-145).dp)) {
                     Text("<< Configuración", color = colorTexto.getColorTexto())
                 }
-                Text(text = "Personalización", modifier = Modifier.offset(x = 140.dp, y = -130.dp), color = colorTexto.getColorTexto())
+                Text(text = "Personalización", modifier = Modifier.offset(x = 140.dp, y = (-130).dp), color = colorTexto.getColorTexto())
                 Column(modifier = Modifier
                     .padding(8.dp)
-                    .offset(x = 0.dp, y = -100.dp)) {
-                    modificarBrilloAplicacion()
-                    crearBotonModoOscuro()
+                    .offset(x = 0.dp, y = (-100).dp)) {
+                    ModificarBrilloAplicacion()
+                    CrearBotonModoOscuro()
                 }
             }
 
@@ -359,7 +356,7 @@ class AplicacionPomodoro {
             Spacer(modifier = Modifier.size(30.dp))
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Button(onClick = {navController.navigate("pantallaPrincipal")}, colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
-                    modifier = Modifier.offset(x = -160.dp, y = -10.dp)) {
+                    modifier = Modifier.offset(x = (-160).dp, y = (-10).dp)) {
                     Text("<< Volver", color = colorTexto.getColorTexto())
                 }
                 Text(text = "Configuración", modifier =  Modifier.offset(x = 0.dp, y=5.dp), color = colorTexto.getColorTexto())
@@ -371,7 +368,13 @@ class AplicacionPomodoro {
 
 
             Column(modifier = Modifier.padding(16.dp)) {
-                ConfigSlider("Ciclos", timerPomodoro.cicloConteo, timerPomodoro::updateFocusCount, 1..12, 1, )
+                ConfigSlider(
+                    "Ciclos",
+                    timerPomodoro.cicloConteo,
+                    timerPomodoro::updateFocusCount,
+                    1..12,
+                    1,
+                )
                 ConfigSlider("Estudio Time", timerPomodoro.estudioTime, timerPomodoro::updateFocusTime, 5..120, 5)
                 ConfigSlider("Descanso Time", timerPomodoro.descansoTime, timerPomodoro::updateBreakTime, 5..60, 5)
                 ConfigSlider("Descanso Largo Time", timerPomodoro.descansoLargoTime, timerPomodoro::updateLongBreakTime, 5..60, 5)
@@ -414,15 +417,17 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun ejecutarAplicacion(savedInstanceState: Bundle?) {
+    fun EjecutarAplicacion(savedInstanceState: Bundle?) {
 
 
         val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = "pantallaPrincipal") {
+        NavHost(navController = navController, startDestination = "login") {
             composable("pantallaPrincipal") { PantallaPrincipal(navController)}
             composable("pantallaColores") { PantallaSeleccionColor(navController) }
             composable("pantallaConfiguracion") {PantallaConfiguracion(navController)}
+            composable("login") { PantallaLogin(navController)}
+            composable("registrarUsuario") { PantallaRegistrarUsuario(navController)}
         }
     }
 

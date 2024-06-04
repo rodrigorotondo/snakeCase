@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -40,13 +41,13 @@ class LoginViewModel: ViewModel() {
         return true
     }
 
-    fun iniciarSesion(onNavigate: () -> Unit)=
+    fun iniciarSesion(navController : NavHostController)=
         viewModelScope.launch {
             try{
                 auth.signInWithEmailAndPassword(_email.value!!,_contrasenia.value!!)
                     .addOnCompleteListener{ task ->
                         if(task.isSuccessful){
-                            onNavigate()
+                            navController.navigate("pantallaPrincipal")
                         }else{
                             Log.d("no se pudo iniciar sesion","${task.result}")
                         }
@@ -55,13 +56,13 @@ class LoginViewModel: ViewModel() {
                 Log.d("no se pudo iniciar sesion","${ex.message}")
             }
         }
-    fun registrarUsuario(onNavigate: () -> Unit){
+    fun registrarUsuario(navController : NavHostController){
         if(!_registrandoUsuario.value!!){
             _registrandoUsuario.value = true
             auth.createUserWithEmailAndPassword(_email.value!!,_contrasenia.value!!)
                 .addOnCompleteListener{task ->
                     if(task.isSuccessful){
-                        onNavigate()
+                        navController.navigate("pantallaPrincipal")
                     }else{
                         Log.d("No se pudo crear usuario","${task.result}")
                     }

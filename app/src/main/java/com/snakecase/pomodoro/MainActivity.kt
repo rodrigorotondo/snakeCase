@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         val aplicacion = AplicacionPomodoro()
 
         setContent {
-            aplicacion.ejecutarAplicacion(savedInstanceState = savedInstanceState)
+            aplicacion.EjecutarAplicacion(savedInstanceState = savedInstanceState)
 
         }
     }
