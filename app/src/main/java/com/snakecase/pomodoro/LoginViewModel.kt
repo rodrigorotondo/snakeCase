@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel: ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
-    private val _cargando = MutableLiveData(false)
+    private val _registrandoUsuario = MutableLiveData(false)
 
     private val _email = MutableLiveData<String>()
     val email : LiveData<String> = _email
@@ -55,5 +55,18 @@ class LoginViewModel: ViewModel() {
                 Log.d("no se pudo iniciar sesion","${ex.message}")
             }
         }
-
+    fun registrarUsuario(onNavigate: () -> Unit){
+        if(!_registrandoUsuario.value!!){
+            _registrandoUsuario.value = true
+            auth.createUserWithEmailAndPassword(_email.value!!,_contrasenia.value!!)
+                .addOnCompleteListener{task ->
+                    if(task.isSuccessful){
+                        onNavigate()
+                    }else{
+                        Log.d("No se pudo crear usuario","${task.result}")
+                    }
+                    _registrandoUsuario.value = false
+                }
+        }
+    }
 }
