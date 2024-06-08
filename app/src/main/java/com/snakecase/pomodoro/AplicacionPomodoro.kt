@@ -280,7 +280,7 @@ class AplicacionPomodoro {
     fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit, range: IntRange, step: Int) {
         var value by remember { mutableStateOf(initialValue) }
         Column {
-            Text(text = "$label: $value", color = colorTexto.getColorTexto()) // Update text color here
+            Text(text = "$label: $value", color = colorTexto.getColorTexto())
             Slider(
                 value = value.toFloat(),
                 onValueChange = { newValue ->

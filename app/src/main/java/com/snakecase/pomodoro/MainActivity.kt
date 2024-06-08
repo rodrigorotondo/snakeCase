@@ -22,7 +22,7 @@ import java.io.IOException
 
 class MainActivity : ComponentActivity() {
 
-    private var pomodoroService: PomodoroService? = null
+    private var timerService: TimerService? = null
     private var isBound = false
 
     private val PERMISSION_REQUEST_CODE = 123
@@ -30,8 +30,8 @@ class MainActivity : ComponentActivity() {
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as PomodoroService.LocalBinder
-            pomodoroService = binder.getService()
+            val binder = service as TimerService.LocalBinder
+            timerService = binder.getService()
             isBound = true
         }
 
@@ -45,11 +45,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val aplicacion = AplicacionPomodoro()
 
-        // Request necessary permissions
         val permissionsToRequest = mutableListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionsToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
-            permissionsToRequest.add(Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE)
+            permissionsToRequest.add(Manifest.permission.FOREGROUND_SERVICE)
         }
 
         if (permissionsToRequest.any {
@@ -57,8 +56,7 @@ class MainActivity : ComponentActivity() {
             }) {
             ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), PERMISSION_REQUEST_CODE)
         } else {
-            // All permissions granted, proceed
-            bindPomodoroService()
+            bindTimerService()
             writeToFile()
         }
 
@@ -66,6 +64,7 @@ class MainActivity : ComponentActivity() {
             aplicacion.ejecutarAplicacion(savedInstanceState = savedInstanceState)
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -78,17 +77,16 @@ class MainActivity : ComponentActivity() {
             }
 
             if (allGranted) {
-                bindPomodoroService()
+                bindTimerService()
                 writeToFile()
             } else {
                 Log.e("MainActivity", "One or more permissions denied")
-
             }
         }
     }
 
-    private fun bindPomodoroService() {
-        val intent = Intent(this, PomodoroService::class.java)
+    private fun bindTimerService() {
+        val intent = Intent(this, TimerService::class.java)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
@@ -118,8 +116,8 @@ class MainActivity : ComponentActivity() {
     }
 
     fun startPomodoro(duration: Long) {
-        if (isBound) {
-            pomodoroService?.startTimer(duration)
-        }
+        val serviceIntent = Intent(this, TimerService::class.java).apply { action = "START" }
+        serviceIntent.putExtra("duration", duration)
+        ContextCompat.startForegroundService(this, serviceIntent)
     }
 }
