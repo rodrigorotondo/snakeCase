@@ -174,13 +174,14 @@ class AplicacionPomodoro {
         }
 
         Box(
-            contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.TopCenter,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 200.dp)
         ) {
+
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 100.dp)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center
@@ -199,33 +200,43 @@ class AplicacionPomodoro {
                         color = colorTexto.getColorTexto()
                     )
                 }
-                Spacer(modifier = Modifier.height(40.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    CrearBoton(
-                        context = context,
-                        estado = if (timerActivo) "Pausado" else "Iniciado",
-                        idImagen = if (timerActivo) R.drawable.pause else R.drawable.play,
-                        descripcion = "Botón de Play/Pausa",
-                        onClick = {
-                            if (timerActivo) pausarTimer() else reanudarTimer()
-                        }
-                    )
+            }
+        }
 
-                    CrearBoton(
-                        context = context,
-                        estado = "Reiniciado",
-                        idImagen = R.drawable.backwards,
-                        descripcion = "Botón de Reiniciar",
-                        onClick = {
-                            reiniciarTimer()
-                        }
-                    )
-                }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 300.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CrearBoton(
+                    context = context,
+                    estado = if (timerActivo) "Pausado" else "Iniciado",
+                    idImagen = if (timerActivo) R.drawable.pause else R.drawable.play,
+                    descripcion = "Botón de Play/Pausa",
+                    onClick = {
+                        if (timerActivo) pausarTimer() else reanudarTimer()
+                    }
+                )
+
+                CrearBoton(
+                    context = context,
+                    estado = "Reiniciado",
+                    idImagen = R.drawable.backwards,
+                    descripcion = "Botón de Reiniciar",
+                    onClick = {
+                        reiniciarTimer()
+                    }
+                )
             }
         }
     }
+
+
+
 
     @Composable
     fun CrearImagenTomate(modifier: Modifier) {
@@ -243,6 +254,7 @@ class AplicacionPomodoro {
         var activado by remember { mutableStateOf(false)}
 
         Spacer(modifier = Modifier.size(30.dp))
+
         if (!activado) {
             Button(onClick = {
                 colorTexto.setColorTexto(Color.White)
@@ -269,16 +281,31 @@ class AplicacionPomodoro {
 
     @Composable
     fun modificarBrilloAplicacion() {
-
-
-
-        Text(text = "Ajustar Brillo", style = MaterialTheme.typography.bodyMedium, color = colorTexto.getColorTexto())
-        Slider(value = brilloVentana.getBrillos(), onValueChange = {brilloVentana.setBrillos(it)},
-            valueRange = 0.1f..1f, steps = 100, modifier = Modifier
+        Text(
+            text = "Ajustar Brillo",
+            style = TextStyle(
+                fontFamily = vt323FontFamily,
+                fontSize = 16.sp,
+                color = colorTexto.getColorTexto()
+            )
+        )
+        Slider(
+            value = brilloVentana.getBrillos(),
+            onValueChange = { brilloVentana.setBrillos(it) },
+            valueRange = 0.1f..1f,
+            steps = 100,
+            modifier = Modifier
                 .fillMaxWidth()
-                .pointerInput(Unit) { detectTransformGestures { _, _, _, _ -> } })
-        Text(text = "Brillo Actual: ${(brilloVentana.getBrillos() * 100).toInt()} %", color = colorTexto.getColorTexto())
-
+                .pointerInput(Unit) { detectTransformGestures { _, _, _, _ -> } }
+        )
+        Text(
+            text = "Brillo Actual: ${(brilloVentana.getBrillos() * 100).toInt()} %",
+            style = TextStyle(
+                fontFamily = vt323FontFamily,
+                fontSize = 16.sp,
+                color = colorTexto.getColorTexto()
+            )
+        )
     }
 
     @Composable
@@ -391,7 +418,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun PantallaConfiguracion(navController : NavHostController) {
+    fun PantallaConfiguracion(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -402,37 +429,48 @@ class AplicacionPomodoro {
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Button(onClick = {navController.navigate("pantallaPrincipal")}, colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
-                    modifier = Modifier.offset(x = -160.dp, y = -10.dp)) {
+                Button(
+                    onClick = { navController.navigate("pantallaPrincipal") },
+                    colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
+                    modifier = Modifier.offset(x = -160.dp, y = -10.dp)
+                ) {
                     Text("<< Volver", color = colorTexto.getColorTexto())
                 }
-                Text(text = "Configuración", modifier =  Modifier.offset(x = 0.dp, y=5.dp), color = colorTexto.getColorTexto())
-
-
+                Text(
+                    text = "Configuración",
+                    modifier = Modifier.offset(x = 0.dp, y = 5.dp),
+                    style = TextStyle(
+                        fontFamily = vt323FontFamily,
+                        fontSize = 20.sp,
+                        color = colorTexto.getColorTexto()
+                    )
+                )
             }
 
             Spacer(modifier = Modifier.size(30.dp))
 
-
             Column(modifier = Modifier.padding(16.dp)) {
-                ConfigSlider("Ciclos", timerPomodoro.cicloConteo, timerPomodoro::updateFocusCount, 1..12, 1, )
+                ConfigSlider("Ciclos", timerPomodoro.cicloConteo, timerPomodoro::updateFocusCount, 1..12, 1)
                 ConfigSlider("Estudio Time", timerPomodoro.estudioTime, timerPomodoro::updateFocusTime, 5..120, 5)
                 ConfigSlider("Descanso Time", timerPomodoro.descansoTime, timerPomodoro::updateBreakTime, 5..60, 5)
                 ConfigSlider("Descanso Largo Time", timerPomodoro.descansoLargoTime, timerPomodoro::updateLongBreakTime, 5..60, 5)
             }
 
             Spacer(modifier = Modifier.size(30.dp))
-            Column(modifier = Modifier
-                .fillMaxSize(), horizontalAlignment = Alignment.Start) {
-                Button(onClick ={ navController.navigate("pantallaColores")}, modifier = Modifier.offset(x = 10.dp, y = 0.dp), shape = RectangleShape) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Button(
+                    onClick = { navController.navigate("pantallaColores") },
+                    modifier = Modifier.offset(x = 10.dp, y = 0.dp),
+                    shape = RectangleShape
+                ) {
                     Text("Personalización                                                    >>", style = TextStyle(fontSize = 15.sp))
-
                 }
             }
-
         }
     }
-
     @Composable
     fun PantallaPrincipal(navController: NavHostController) {
         PomodoroTheme {
