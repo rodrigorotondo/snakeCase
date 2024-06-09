@@ -4,8 +4,6 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,11 +48,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.snakecase.pomodoro.ui.theme.PomodoroTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlin.concurrent.timer
 
 
 data class ColorVentana(private var colorConstructor : Color) {
@@ -98,34 +94,45 @@ data class ColorTexto(private var colorTexto : Color) {
 
 class AplicacionPomodoro {
 
-    val colorVentana = ColorVentana(Color.Red)
+    val colorVentana = ColorVentana(Color.White)
     val brilloVentana = BrilloVentana(1F)
     val timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
     val colorTexto = ColorTexto(Color.Black)
     val colorVentanaConfiguracion = ColorVentana(Color.White)
 
     @Composable
-    fun CrearBoton(context: Context, estado: String, idImagen: Int, descripcion: String, onClick: () -> Unit) {
-        Spacer(modifier = Modifier.width(64.dp))
+    fun CrearBoton(
+        context: Context,
+        estado: String,
+        idImagen: Int,
+        descripcion: String,
+        onClick: () -> Unit
+    ) {
         IconButton(
             onClick = {
                 onClick()
                 Toast.makeText(context, estado, Toast.LENGTH_SHORT).show()
             },
-            modifier = Modifier.padding(top = 500.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .size(80.dp)
         ) {
-            Image(painter = painterResource(id = idImagen), contentDescription = descripcion, modifier = Modifier.size(100.dp))
+            Image(
+                painter = painterResource(id = idImagen),
+                contentDescription = descripcion,
+                modifier = Modifier.size(80.dp)
+            )
         }
     }
 
 
+
     @Composable
     fun CrearBotones(context: Context) {
-
         var minutos by remember { mutableIntStateOf(timerPomodoro.obtenerMinutos()) }
         var segundos by remember { mutableIntStateOf(timerPomodoro.obtenerSegundos()) }
         var timerActivo by remember { mutableStateOf(!timerPomodoro.enPausa()) }
-        val reproductorSonido = MediaPlayer.create(context ,R.raw.alarma1)
+        val reproductorSonido = MediaPlayer.create(context, R.raw.alarma1)
 
         LaunchedEffect(timerActivo) {
             if (timerActivo) {
@@ -135,7 +142,7 @@ class AplicacionPomodoro {
                         timerPomodoro.pasa1Segundo()
                         minutos = timerPomodoro.obtenerMinutos()
                         segundos = timerPomodoro.obtenerSegundos()
-                        if(minutos == 0 && segundos == 0){
+                        if (minutos == 0 && segundos == 0) {
                             timerPomodoro.pasa1Segundo()
                             minutos = timerPomodoro.obtenerMinutos()
                             segundos = timerPomodoro.obtenerSegundos()
@@ -166,32 +173,64 @@ class AplicacionPomodoro {
             segundos = timerPomodoro.obtenerSegundos()
         }
 
-
-        val tiempoFormateado = String.format("%02d:%02d", minutos, segundos)
-
-        Box {
-            Text(text = tiempoFormateado, fontSize = 70.sp, modifier = Modifier
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.Center)
-                .padding(100.dp)
-                .padding(top = 230.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Spacer(modifier = Modifier.width(50.dp))
-                CrearBoton(context = context, estado = if (timerActivo) "Pausado" else "Iniciado", idImagen = if (timerActivo) android.R.drawable.ic_media_pause else android.R.drawable.ic_media_play, descripcion = "Botón de Play/Pausa", onClick = {
-                    if(timerActivo) pausarTimer() else reanudarTimer()
-                })
+                .padding(top = 200.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "${minutos.toString().padStart(2, '0')}:",
+                        fontSize = 70.sp,
+                        fontFamily = vt323FontFamily,
+                        color = colorTexto.getColorTexto()
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = segundos.toString().padStart(2, '0'),
+                        fontSize = 70.sp,
+                        fontFamily = vt323FontFamily,
+                        color = colorTexto.getColorTexto()
+                    )
+                }
+                Spacer(modifier = Modifier.height(40.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    CrearBoton(
+                        context = context,
+                        estado = if (timerActivo) "Pausado" else "Iniciado",
+                        idImagen = if (timerActivo) R.drawable.pause else R.drawable.play,
+                        descripcion = "Botón de Play/Pausa",
+                        onClick = {
+                            if (timerActivo) pausarTimer() else reanudarTimer()
+                        }
+                    )
 
-                CrearBoton(context = context, estado = "Reiniciado", idImagen = android.R.drawable.ic_media_previous, descripcion = "Botón de Reiniciar", onClick = {
-                    reiniciarTimer()
-                })
+                    CrearBoton(
+                        context = context,
+                        estado = "Reiniciado",
+                        idImagen = R.drawable.backwards,
+                        descripcion = "Botón de Reiniciar",
+                        onClick = {
+                            reiniciarTimer()
+                        }
+                    )
+                }
             }
         }
-
     }
+
     @Composable
-    fun CrearImagenTomate() {
+    fun CrearImagenTomate(modifier: Modifier) {
         Image(
-            painter = painterResource(id = R.drawable.tomate),
+            painter = painterResource(id = R.drawable.tomate_study),
             contentDescription = "Tomate",
             modifier = Modifier.size(750.dp)
         )
@@ -245,7 +284,7 @@ class AplicacionPomodoro {
     @Composable
     fun CrearBotonesColores(onColorSelected: (Color) -> Unit) {
         val colores = listOf(
-            Color(0xFFE57373), Color(0xFF81C784), Color(0xFFFFC0CB), Color(0xFFFFD54F),
+            Color(0xFFFFFFFF), Color(0xFF81C784), Color(0xFFFFC0CB), Color(0xFFFFD54F),
             Color(0xFFE6CCFF), Color(0xFFFFB74D), Color(0xFF4DB6AC), Color(0xFF7986CB),
             Color(0xFF4DD0E1), Color(0xFFAED581), Color(0xFF9575CD), Color(0xFF64B5F6)
         )
@@ -295,16 +334,21 @@ class AplicacionPomodoro {
 
     @Composable
     fun CrearBotonConfiguracion(navController : NavHostController) {
-
-        IconButton(onClick =  {navController.navigate("pantallaConfiguracion")} ,
+        IconButton(
+            onClick =  {navController.navigate("pantallaConfiguracion")},
             modifier = Modifier
-                .padding(top = 50.dp)
-                .offset(x = 320.dp)) {
-            Image(painter = painterResource(id = R.drawable.configuracion), contentDescription = "Imagen de Configuracion")
-
+                .padding(top = 50.dp, end = 16.dp)
+                .size(80.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.settingicon),
+                contentDescription = "Imagen de Configuracion",
+                modifier = Modifier.size(80.dp)
+            )
         }
-
     }
+
+
 
     @Composable
     fun PantallaSeleccionColor(navController : NavHostController) {
@@ -390,7 +434,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun PantallaPrincipal(navController : NavHostController) {
+    fun PantallaPrincipal(navController: NavHostController) {
         PomodoroTheme {
             val context = LocalContext.current
             Column(
@@ -406,12 +450,15 @@ class AplicacionPomodoro {
                         .background(color = colorVentana.getColorVentana())
                 ) {
                     CrearBotonConfiguracion(navController)
-                    CrearImagenTomate()
+                    CrearImagenTomate(modifier = Modifier.padding(top = 100.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
                     CrearBotones(context)
                 }
+                Spacer(modifier = Modifier.height(50.dp))
             }
         }
     }
+
 
     @Composable
     fun ejecutarAplicacion(savedInstanceState: Bundle?) {

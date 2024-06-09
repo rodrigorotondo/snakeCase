@@ -1,6 +1,5 @@
-package com.snakecase.pomodoro.ui.theme
+package com.snakecase.pomodoro
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -52,7 +51,7 @@ fun PomodoroTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = com.snakecase.pomodoro.Typography,
         content = content
     )
 }

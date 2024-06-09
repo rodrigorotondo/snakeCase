@@ -117,11 +117,11 @@ class TimerService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Timer is Running")
             .setContentText(contentText)
-            .setSmallIcon(R.drawable.tomate)
+            .setSmallIcon(R.drawable.icono_tomate)
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.tomate, "Pause", pausePendingIntent)
-            .addAction(R.drawable.tomate, "Resume", resumePendingIntent)
-            .addAction(R.drawable.tomate, "Stop", stopPendingIntent)
+            .addAction(R.drawable.pause, "Pause", pausePendingIntent)
+            .addAction(R.drawable.play, "Resume", resumePendingIntent)
+            .addAction(R.drawable.cancel, "Stop", stopPendingIntent)
     }
 
     private fun updateNotification(contentText: String) {
