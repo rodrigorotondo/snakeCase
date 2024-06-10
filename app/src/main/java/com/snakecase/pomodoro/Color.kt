@@ -1,4 +1,4 @@
-package com.snakecase.pomodoro.ui.theme
+package com.snakecase.pomodoro
 
 import androidx.compose.ui.graphics.Color
 
