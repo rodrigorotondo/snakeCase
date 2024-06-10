@@ -2,7 +2,7 @@
 
 ## Integrantes
 - Cindy Hsieh     Padron: 108051
-- Santiago Janon     Padron: 1006079
+- Santiago Janon     Padron: 106079
 - Rodrigo Rotondo     Padron: 109210
 
 ## Objetivos
