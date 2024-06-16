@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -55,7 +56,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.snakecase.pomodoro.ui.theme.PomodoroTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -634,8 +634,8 @@ class AplicacionPomodoro {
                 Column(modifier = Modifier
                     .padding(8.dp)
                     .offset(x = 0.dp, y = -20.dp)) {
-                    modificarBrilloAplicacion()
-                    crearBotonModoOscuro()
+                    ModificarBrilloAplicacion()
+                    CrearBotonModoOscuro()
                     Spacer(modifier = Modifier.size(30.dp))
                     crearBotonCambioImagen(navController)
                     Spacer(modifier = Modifier.size(30.dp))

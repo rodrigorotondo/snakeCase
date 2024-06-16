@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            aplicacion.ejecutarAplicacion(savedInstanceState = savedInstanceState)
+            aplicacion.EjecutarAplicacion(savedInstanceState = savedInstanceState)
         }
     }
 
