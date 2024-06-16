@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,6 +35,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,14 +55,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.snakecase.pomodoro.ui.theme.PomodoroTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import kotlin.concurrent.timer
 
 
 data class ColorVentana(private var colorConstructor : Color) {
 
-    var color by mutableStateOf(colorConstructor)
+    private var color by mutableStateOf(colorConstructor)
 
     fun setColorVentana(nuevoColor : Color){
         color = nuevoColor
@@ -75,7 +77,7 @@ data class ColorVentana(private var colorConstructor : Color) {
 
 data class BrilloVentana(var valor : Float) {
 
-    var brillo by  mutableStateOf(valor)
+    private var brillo by  mutableFloatStateOf(valor)
 
     fun setBrillos(nuevoBrillo : Float){
         brillo = nuevoBrillo
@@ -278,7 +280,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun crearBotonModoOscuro() {
+    fun CrearBotonModoOscuro() {
 
         var activado by remember { mutableStateOf(false)}
 
@@ -315,7 +317,7 @@ class AplicacionPomodoro {
     }
 
     @Composable
-    fun modificarBrilloAplicacion() {
+    fun ModificarBrilloAplicacion() {
 
         var color_aux = colorVentana.getColorVentana()
         if(colorVentana.getColorVentana() == Color.White){
@@ -700,6 +702,7 @@ class AplicacionPomodoro {
 
             Spacer(modifier = Modifier.size(30.dp))
 
+
             Column(modifier = Modifier.padding(16.dp)) {
                 ConfigSlider("Ciclos", timerPomodoro.cicloConteo,timerPomodoro::updateFocusCount, 1..12, 1)
                 ConfigSlider("Estudio Time", timerPomodoro.estudioTime, timerPomodoro::updateFocusTime, 5..120, 5)
@@ -754,17 +757,19 @@ class AplicacionPomodoro {
 
 
     @Composable
-    fun ejecutarAplicacion(savedInstanceState: Bundle?) {
+    fun EjecutarAplicacion(savedInstanceState: Bundle?) {
 
 
         val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = "pantallaPrincipal") {
+        NavHost(navController = navController, startDestination = "login") {
             composable("pantallaPrincipal") { PantallaPrincipal(navController)}
             composable("pantallaColores") { PantallaSeleccionColor(navController) }
             composable("pantallaConfiguracion") {PantallaConfiguracion(navController)}
             composable("pantallaCambioImagen") {PantallaCambioImagen(navController)}
             composable("pantallaCambioAudio") {PantallaCambioAudio(navController)}
+            composable("login") { PantallaLogin(navController)}
+            composable("registrarUsuario") { PantallaRegistrarUsuario(navController)}
         }
     }
 
