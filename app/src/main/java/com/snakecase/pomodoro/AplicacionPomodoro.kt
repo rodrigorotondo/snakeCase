@@ -83,7 +83,7 @@ class AplicacionPomodoro {
         var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
         var idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
 
-        NavHost(navController = navController, startDestination = "login") {
+        NavHost(navController = navController, startDestination = "pantallaLeaderBoard") {
             composable("pantallaPrincipal") { ventanaPrincipal.PantallaPrincipal(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}
             composable("pantallaColores") { ventanaPersonalizacion.PantallaSeleccionColor(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio) }
             composable("pantallaConfiguracion") {ventanaConfiguracion.PantallaConfiguracion(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}
@@ -91,6 +91,7 @@ class AplicacionPomodoro {
             composable("pantallaCambioAudio") {ventanaCambioAudio.PantallaCambioAudio(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}
             composable("login") { PantallaLogin(navController)}
             composable("registrarUsuario") { PantallaRegistrarUsuario(navController)}
+            composable("pantallaLeaderBoard"){ PantallaLeaderBoard(navController, "usuario")}
         }
     }
 }

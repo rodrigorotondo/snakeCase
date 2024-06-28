@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 
+
 class DataBaseManager(nombreUsuario:String) {
     val DB = Firebase.firestore.collection("LeaderBoard").document(nombreUsuario)
 
@@ -14,6 +15,16 @@ class DataBaseManager(nombreUsuario:String) {
             "ciclos" to FieldValue.increment(1)
         )
         DB.set(actualizacion, SetOptions.merge())
+    }
+
+    fun obtenerLeadearBoard(): HashMap<String, Int> {
+        val  leaderBoard : HashMap<String, Int> = HashMap<String, Int> ()
+        Firebase.firestore.collection("LeaderBoard").orderBy("ciclos").get().addOnSuccessListener { resultado ->
+            for(documento in resultado){
+                leaderBoard[documento.id] = documento.get("ciclos").toString().toInt()
+            }
+        }
+        return leaderBoard
     }
 
 }
