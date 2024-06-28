@@ -45,8 +45,8 @@ fun PantallaLeaderBoard(navController: NavHostController, nombreUsuario: String)
             .padding(16.dp)
     ) {
         Text(
-            text = "Tamaño de la lista: ${leaderboard.size}",
-            style = MaterialTheme.typography.titleMedium
+            text = "LeaderBoard:",
+            style = MaterialTheme.typography.titleLarge
         )
 
         Spacer(modifier = Modifier.height(16.dp))
