@@ -1,15 +1,26 @@
 package com.snakecase.pomodoro
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.util.Patterns
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LoginViewModel: ViewModel() {
 
@@ -41,33 +52,58 @@ class LoginViewModel: ViewModel() {
         return true
     }
 
-    fun iniciarSesion(navController : NavHostController)=
+    fun iniciarSesion(navController : NavHostController, context : Context) {
+        val email = _email.value ?: return
+        val contrasenia = _contrasenia.value ?: return
+
         viewModelScope.launch {
-            try{
-                auth.signInWithEmailAndPassword(_email.value!!,_contrasenia.value!!)
-                    .addOnCompleteListener{ task ->
-                        if(task.isSuccessful){
-                            navController.navigate("pantallaPrincipal")
-                        }else{
-                            Log.d("no se pudo iniciar sesion","${task.result}")
-                        }
+            try {
+
+                auth.signInWithEmailAndPassword(email, contrasenia).await()
+                navController.navigate("pantallaPrincipal")
+            } catch (exception: Exception) {
+                Log.d("AuthViewModel", "Error al iniciar sesión: ${exception.message}")
+
+                when (exception) {
+                    is FirebaseAuthInvalidUserException -> {
+                        Log.d("No se pudo iniciar sesion, usuario no encontrado", "${exception.message}")
+                        Toast.makeText(context, "Error de Inicializacion", Toast.LENGTH_LONG).show()
                     }
-            }catch(ex:Exception){
-                Log.d("no se pudo iniciar sesion","${ex.message}")
-            }
-        }
-    fun registrarUsuario(navController : NavHostController){
-        if(!_registrandoUsuario.value!!){
-            _registrandoUsuario.value = true
-            auth.createUserWithEmailAndPassword(_email.value!!,_contrasenia.value!!)
-                .addOnCompleteListener{task ->
-                    if(task.isSuccessful){
-                        navController.navigate("pantallaPrincipal")
-                    }else{
-                        Log.d("No se pudo crear usuario","${task.result}")
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        Log.d("No se pudo iniciar sesión", "Credenciales inválidas: ${exception.message}")
+                        Toast.makeText(context, "Error de Inicializacion", Toast.LENGTH_LONG).show()
                     }
-                    _registrandoUsuario.value = false
+                    else -> { Log.d("no se pudo iniciar sesion", "${exception.message}")
+                        Toast.makeText(context, "Error de Inicializacion", Toast.LENGTH_LONG).show()}
                 }
+            }
+
+        }
+
+
+    }
+
+    fun registrarUsuario(navController : NavHostController, context: Context){
+        val email = _email.value ?: return
+        val contrasenia = _contrasenia.value ?: return
+
+        try {
+            if(!_registrandoUsuario.value!!) {
+                auth.createUserWithEmailAndPassword(email, contrasenia)
+                navController.navigate("pantallaPrincipal")
+            }
+
+        } catch(exception : Exception) {
+            Log.d("AuthViewModel", "Error al iniciar sesión: ${exception.message}")
+
+            when (exception) {
+                is FirebaseAuthUserCollisionException -> {
+                    Log.d("No se pudo registrar", "${exception.message}")
+                    Toast.makeText(context, "El usuario ya esta registrado", Toast.LENGTH_LONG).show()
+                }
+                else -> { Log.d("no se pudo iniciar sesion", "${exception.message}")
+                    Toast.makeText(context, "Error de Registracion", Toast.LENGTH_LONG).show()}
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -42,13 +43,14 @@ fun Registrar(modifier: Modifier, viewModel: LoginViewModel, navController : Nav
     val email: String by viewModel.email.observeAsState(initial="")
     val contrasenia: String by viewModel.contrasenia.observeAsState(initial="")
     val permitirLogin: Boolean by viewModel.permitirLogin.observeAsState(initial = false)
+    val context = LocalContext.current
     Column(modifier=modifier){
         Spacer(modifier = Modifier.padding(16.dp))
         CampoEMail(email) { viewModel.cambioEnCampos(it, contrasenia) }
         Spacer(modifier = Modifier.padding(6.dp))
         CampoContrasenia(contrasenia) { viewModel.cambioEnCampos(email, it) }
         Spacer(modifier = Modifier.padding(6.dp))
-        BotonRegistrarse(permitirLogin) {viewModel.registrarUsuario(navController)}
+        BotonRegistrarse(permitirLogin) {viewModel.registrarUsuario(navController, context)}
         Spacer(modifier = Modifier.padding(6.dp))
         Logueate(navController)
     }
