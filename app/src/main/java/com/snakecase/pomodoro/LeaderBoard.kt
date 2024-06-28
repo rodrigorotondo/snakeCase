@@ -1,37 +1,85 @@
 package com.snakecase.pomodoro
 
-import androidx.compose.foundation.layout.Box
+
+import androidx.compose.foundation.layout.Arrangement
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.navigation.NavHostController
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.snakecase.DataBaseManager
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+
 
 @Composable
+fun PantallaLeaderBoard(navController: NavHostController, nombreUsuario: String) {
+    var leaderboard by remember { mutableStateOf<HashMap<String, Int>>(hashMapOf()) }
+    var dataList by remember { mutableStateOf<List<Pair<String, Int>>>(listOf()) }
 
-fun PantallaLeaderBoard(navController : NavHostController, nombreUsuario: String){
-    var DB = DataBaseManager(nombreUsuario)
-    val leaderboard by remember{
-        mutableStateOf( DB.obtenerLeadearBoard())}
-    val dataList by remember {
-        mutableStateOf(leaderboard.toList())
-    }
-    Text(text = "tamanio de la lista: ${leaderboard.size}")
-    LazyColumn {
-        items(dataList){item ->
-            Box(){
-
-                Text(text = "${dataList.size}")
-            }
-
-
+    LaunchedEffect(Unit) {
+        val dbManager = DataBaseManager(nombreUsuario)
+        dbManager.obtenerLeadearBoard { result ->
+            leaderboard = result
+            dataList = leaderboard.toList().sortedByDescending { it.second }
         }
     }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Tamaño de la lista: ${leaderboard.size}",
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(dataList) { item ->
+                LeaderboardItem(username = item.first, score = item.second)
+            }
+        }
+    }
 }
+
+@Composable
+fun LeaderboardItem(username: String, score: Int) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = username,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = score.toString(),
+            fontSize = 20.sp,
+            color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
