@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun PantallaLogin(navController : NavHostController){
-    val viewModel = LoginViewModel()
+fun PantallaLogin(navController : NavHostController, viewModel: LoginViewModel){
+
     Box(
         Modifier
             .fillMaxSize()

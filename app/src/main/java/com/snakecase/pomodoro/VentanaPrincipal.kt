@@ -40,7 +40,7 @@ class VentanaPrincipal : Ventana{
 
     override var colorVentana = Ventana.ColorVentana(Color.White)
     override var brilloVentana = Ventana.BrilloVentana(1F)
-    override var timerPomodoro = Pomodoro(TipoTimer.ESTUDIO)
+    override var timerPomodoro = Pomodoro()
     override var colorTexto = Ventana.ColorTexto(Color.Black)
     override var colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
     override var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
@@ -72,7 +72,7 @@ class VentanaPrincipal : Ventana{
     }
 
     @Composable
-    fun CrearBotones(context: Context) {
+    fun CrearBotones(context: Context, nombreUsuario: String) {
         var minutos by remember { mutableIntStateOf(timerPomodoro.obtenerMinutos()) }
         var segundos by remember { mutableIntStateOf(timerPomodoro.obtenerSegundos()) }
         var timerActivo by remember { mutableStateOf(!timerPomodoro.enPausa()) }
@@ -83,11 +83,11 @@ class VentanaPrincipal : Ventana{
                 while (minutos >= 0 || segundos >= 0) {
                     delay(1000)
                     withContext(Dispatchers.Main) {
-                        timerPomodoro.pasa1Segundo()
+                        timerPomodoro.pasa1Segundo(nombreUsuario)
                         minutos = timerPomodoro.obtenerMinutos()
                         segundos = timerPomodoro.obtenerSegundos()
                         if (minutos == 0 && segundos == 0) {
-                            timerPomodoro.pasa1Segundo()
+                            timerPomodoro.pasa1Segundo(nombreUsuario)
                             minutos = timerPomodoro.obtenerMinutos()
                             segundos = timerPomodoro.obtenerSegundos()
                             timerPomodoro.pausar()
@@ -209,7 +209,7 @@ class VentanaPrincipal : Ventana{
     @Composable
     fun PantallaPrincipal(navController: NavHostController, colorVentanaAux : Ventana.ColorVentana, brilloVentanaAux : Ventana.BrilloVentana,
                           timerPomodoroAux : Pomodoro, colorTextoAux : Ventana.ColorTexto, colorVentanaConfiguracionAux : Ventana.ColorVentana,
-                          idImagenPrincipalPomodoroAux : Ventana.IdImagenPomodoro, idAudioAux : Ventana.IdAudioPomodoro
+                          idImagenPrincipalPomodoroAux : Ventana.IdImagenPomodoro, idAudioAux : Ventana.IdAudioPomodoro, nombreUsuario: String
     ) {
         setearParametros(colorVentanaAux, brilloVentanaAux, timerPomodoroAux, colorTextoAux, colorVentanaConfiguracionAux, idImagenPrincipalPomodoroAux, idAudioAux)
         PomodoroTheme {
@@ -229,7 +229,7 @@ class VentanaPrincipal : Ventana{
                     CrearBotonConfiguracion(navController)
                     CrearImagenTomate()
                     Spacer(modifier = Modifier.height(30.dp))
-                    CrearBotones(context)
+                    CrearBotones(context, nombreUsuario)
                 }
                 Spacer(modifier = Modifier.height(50.dp))
             }

@@ -1,13 +1,10 @@
 package com.snakecase.pomodoro
-import android.annotation.SuppressLint
+
 import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.core.content.ContentProviderCompat.requireContext
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +33,10 @@ class LoginViewModel: ViewModel() {
     private val _permitirLogin = MutableLiveData<Boolean>()
     val permitirLogin: LiveData<Boolean> = _permitirLogin
 
+    fun obtenerUserName(): String{
+        return email.value?.substringBefore("@") ?: "guest"
+    }
+
 
     fun cambioEnCampos(email: String, contrasenia: String){
         _email.value = email
@@ -60,6 +61,7 @@ class LoginViewModel: ViewModel() {
             try {
 
                 auth.signInWithEmailAndPassword(email, contrasenia).await()
+
                 navController.navigate("pantallaPrincipal")
             } catch (exception: Exception) {
                 Log.d("AuthViewModel", "Error al iniciar sesión: ${exception.message}")

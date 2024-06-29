@@ -7,14 +7,14 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 
 
-class DataBaseManager(nombreUsuario: String) {
-    val DB = Firebase.firestore.collection("LeaderBoard").document(nombreUsuario)
+class DataBaseManager(val nombreUsuario: String) {
+
 
     fun incrementarCiclos() {
         val actualizacion = hashMapOf(
             "ciclos" to FieldValue.increment(1)
         )
-        DB.set(actualizacion, SetOptions.merge())
+        Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
     }
 
     fun obtenerLeadearBoard(onResult: (HashMap<String, Int>) -> Unit) {

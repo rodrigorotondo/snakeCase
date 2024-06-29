@@ -27,8 +27,8 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun PantallaRegistrarUsuario(navController : NavHostController){
-    val viewModel = LoginViewModel()
+fun PantallaRegistrarUsuario(navController : NavHostController, viewModel: LoginViewModel){
+
     Box(
         Modifier
             .fillMaxSize()

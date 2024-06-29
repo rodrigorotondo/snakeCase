@@ -1,29 +1,30 @@
 package com.snakecase.pomodoro
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 import com.snakecase.DataBaseManager
-data class Pomodoro(private var tipoTimer: TipoTimer) {
+data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
     private var ciclos = 0
     var minutosRestantes = tipoTimer.minutos
     var segundosRestantes = 0
     private var pausa = true
 
-    var cicloConteo by mutableStateOf(4)
-    var estudioTime by mutableStateOf(25)
-    var descansoTime by mutableStateOf(5)
-    var descansoLargoTime by mutableStateOf(20)
+    var cicloConteo by mutableIntStateOf(4)
+    var estudioTime by mutableIntStateOf(25)
+    var descansoTime by mutableIntStateOf(5)
+    var descansoLargoTime by mutableIntStateOf(20)
 
     fun obtenerTipoTimer(): TipoTimer {
         return tipoTimer
     }
 
-    fun actualizarTipoTimer() {
+    fun actualizarTipoTimer(nombreUsuario: String) {
         if (ciclos < cicloConteo) {
             if (tipoTimer == TipoTimer.ESTUDIO) {
-                incrementarCiclo()
+                incrementarCiclo(nombreUsuario)
                 tipoTimer = TipoTimer.DESCANSOCORTO
             } else {
                 tipoTimer = TipoTimer.ESTUDIO
@@ -35,20 +36,22 @@ data class Pomodoro(private var tipoTimer: TipoTimer) {
         actualizarMinutosRestantes()
     }
 
-    fun incrementarCiclo() {
+    fun incrementarCiclo(nombreUsuario: String) {
         ciclos = ciclos + 1
-        val DBManager = DataBaseManager("usuario")
-        DBManager.incrementarCiclos()
+        if(nombreUsuario != "guest"){
+            val DBManager = DataBaseManager(nombreUsuario)
+            DBManager.incrementarCiclos()
+        }
     }
 
-    fun pasa1Segundo() {
+    fun pasa1Segundo(nombreUsuario: String) {
         if (segundosRestantes > 0) {
             segundosRestantes -= 1
         } else if (minutosRestantes > 0) {
             minutosRestantes -= 1
             segundosRestantes = 59
         } else {
-            actualizarTipoTimer()
+            actualizarTipoTimer(nombreUsuario)
         }
     }
 
