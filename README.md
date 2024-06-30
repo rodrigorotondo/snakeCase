@@ -16,5 +16,5 @@
 - [x] implementar funcionalidades firebase
 - [x] implementar un login
 - [x] implementar una pagina de registro de usuarios
-- [ ] implementar un leaderboard
+- [x] implementar un leaderboard
 - [ ] gameficar el pomodoro
