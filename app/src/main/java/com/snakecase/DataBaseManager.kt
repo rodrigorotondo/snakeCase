@@ -17,14 +17,14 @@ class DataBaseManager(val nombreUsuario: String) {
         Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
     }
 
-    fun obtenerLeaderBoard(onResult: (HashMap<String, Int>) -> Unit) {
+    suspend fun obtenerLeaderBoard(): HashMap<String, Int> {
         val leaderBoard: HashMap<String, Int> = HashMap()
-        Firebase.firestore.collection("LeaderBoard").orderBy("ciclos").get()
-            .addOnSuccessListener { resultado ->
-                for (documento in resultado) {
-                    leaderBoard[documento.id] = documento.get("ciclos").toString().toInt()
-                }
-                onResult(leaderBoard)
-            }
+        val resultado = Firebase.firestore.collection("LeaderBoard").orderBy("ciclos").get().await()
+
+        for (documento in resultado) {
+            leaderBoard[documento.id] = documento.get("ciclos").toString().toInt()
+        }
+        return leaderBoard
+
     }
 }

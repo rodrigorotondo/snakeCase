@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.snakecase.DataBaseManager
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -95,7 +96,10 @@ class LoginViewModel: ViewModel() {
         try {
             if(!_registrandoUsuario.value!!) {
                 auth.createUserWithEmailAndPassword(email, contrasenia)
-                crearPosicionLeaderBoard()
+                GlobalScope.launch{
+
+                    crearPosicionLeaderBoard()
+                }
                 navController.navigate("pantallaPrincipal")
             }
 
@@ -113,14 +117,14 @@ class LoginViewModel: ViewModel() {
         }
     }
 
-    private fun crearPosicionLeaderBoard() {
+     suspend fun crearPosicionLeaderBoard() {
         val nombreUsuario = this.obtenerUserName()
         val  db = DataBaseManager(nombreUsuario)
         var posicion = 0
 
-        db.obtenerLeaderBoard{ result ->
+        val leaderboard = db.obtenerLeaderBoard()
             var contar = true
-            val datalist = result.toList().sortedByDescending { it.second }
+            val datalist = leaderboard.toList().sortedByDescending { it.second }
 
             for((clave,valor) in datalist){
                 if(clave != nombreUsuario && contar){
@@ -132,7 +136,7 @@ class LoginViewModel: ViewModel() {
                 }
             }
 
-        }
+
         posicionUsuario = posicion
 
     }

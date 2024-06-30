@@ -27,25 +27,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun PantallaLeaderBoard(navController: NavHostController, viewModel: LoginViewModel) {
     val nombreUsuario = viewModel.obtenerUserName()
     val posicionInicial = viewModel.obtenerPosicionInicialLeaderBoard()
-    var posicionActual = 0
-    var leaderboard by remember { mutableStateOf<HashMap<String, Int>>(hashMapOf()) }
+    var posicionActual: Int? = null
     var dataList by remember { mutableStateOf<List<Pair<String, Int>>>(listOf()) }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         val dbManager = DataBaseManager(nombreUsuario)
-        dbManager.obtenerLeaderBoard { result ->
-            leaderboard = result
-            dataList = leaderboard.toList().sortedByDescending { it.second }
-            posicionActual = obtenerPosicionActual(dataList, nombreUsuario)
-            crearAvisoPosicion(posicionInicial,posicionActual,context)
-        }
+        val leaderboard = dbManager.obtenerLeaderBoard()
+        dataList = leaderboard.toList().sortedByDescending { it.second }
+        posicionActual = obtenerPosicionActual(dataList, nombreUsuario)
+        crearAvisoPosicion(posicionInicial,posicionActual ?: -1,context, viewModel)
+
     }
 
     Column(
@@ -111,12 +111,22 @@ fun obtenerPosicionActual(lista: List<Pair<String, Int>>, nombreUsuario: String)
 
 }
 
-fun crearAvisoPosicion(posicionInicial: Int, posicionActual: Int, context: Context){
+fun crearAvisoPosicion(posicionInicial: Int, posicionActual: Int, context: Context, viewModel: LoginViewModel){
     if(posicionActual < posicionInicial){
         Toast.makeText(context, "Felicidades, avanzaste ${posicionInicial - posicionActual} posiciones!! ", Toast.LENGTH_LONG).show()
+        actualizarPosicion(viewModel)
     }else if(posicionActual > posicionInicial){
         Toast.makeText(context, "Descendiste ${posicionActual-posicionInicial} posiciones :( ", Toast.LENGTH_LONG).show()
+        actualizarPosicion(viewModel)
     }
+}
+
+private fun actualizarPosicion(viewModel: LoginViewModel){
+    GlobalScope.launch{
+
+        viewModel.crearPosicionLeaderBoard()
+    }
+
 }
 
 
