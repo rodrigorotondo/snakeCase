@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -207,6 +208,17 @@ class VentanaPrincipal : Ventana{
     }
 
     @Composable
+    fun CrearBotonLeaderBoard(navController: NavHostController){
+        IconButton(onClick = { navController.navigate("pantallaLeaderBoard") },
+            modifier = Modifier
+                .offset(x=320.dp).padding(top = 41.dp, end = 16.dp)
+                .size(100.dp)) {
+            Image(painter = painterResource(id = R.drawable.leaderboard3), contentDescription ="Imagen de leaderBoard", modifier = Modifier.size(70.dp))
+
+        }
+    }
+
+    @Composable
     fun PantallaPrincipal(navController: NavHostController, colorVentanaAux : Ventana.ColorVentana, brilloVentanaAux : Ventana.BrilloVentana,
                           timerPomodoroAux : Pomodoro, colorTextoAux : Ventana.ColorTexto, colorVentanaConfiguracionAux : Ventana.ColorVentana,
                           idImagenPrincipalPomodoroAux : Ventana.IdImagenPomodoro, idAudioAux : Ventana.IdAudioPomodoro, nombreUsuario: String
@@ -227,9 +239,11 @@ class VentanaPrincipal : Ventana{
                         .background(color = colorVentana.getColorVentana())
                 ) {
                     CrearBotonConfiguracion(navController)
+                    CrearBotonLeaderBoard(navController)
                     CrearImagenTomate()
                     Spacer(modifier = Modifier.height(30.dp))
                     CrearBotones(context, nombreUsuario)
+
                 }
                 Spacer(modifier = Modifier.height(50.dp))
             }
