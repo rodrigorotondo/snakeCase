@@ -1,6 +1,8 @@
 package com.snakecase.pomodoro
 
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.foundation.layout.Column
@@ -23,19 +25,26 @@ import com.snakecase.DataBaseManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 
 
 @Composable
-fun PantallaLeaderBoard(navController: NavHostController, nombreUsuario: String) {
+fun PantallaLeaderBoard(navController: NavHostController, viewModel: LoginViewModel) {
+    val nombreUsuario = viewModel.obtenerUserName()
+    val posicionInicial = viewModel.obtenerPosicionInicialLeaderBoard()
+    var posicionActual = 0
     var leaderboard by remember { mutableStateOf<HashMap<String, Int>>(hashMapOf()) }
     var dataList by remember { mutableStateOf<List<Pair<String, Int>>>(listOf()) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         val dbManager = DataBaseManager(nombreUsuario)
         dbManager.obtenerLeaderBoard { result ->
             leaderboard = result
             dataList = leaderboard.toList().sortedByDescending { it.second }
+            posicionActual = obtenerPosicionActual(dataList, nombreUsuario)
+            crearAvisoPosicion(posicionInicial,posicionActual,context)
         }
     }
 
@@ -84,4 +93,30 @@ fun LeaderboardItem(username: String, score: Int) {
         )
     }
 }
+
+
+fun obtenerPosicionActual(lista: List<Pair<String, Int>>, nombreUsuario: String): Int{
+    var contar = true
+    var posicion = 0
+    for((clave,valor) in lista){
+        if(clave != nombreUsuario && contar){
+
+            posicion += 1
+        }
+        else{
+            contar = false
+        }
+    }
+    return posicion
+
+}
+
+fun crearAvisoPosicion(posicionInicial: Int, posicionActual: Int, context: Context){
+    if(posicionActual < posicionInicial){
+        Toast.makeText(context, "Felicidades, avanzaste ${posicionInicial - posicionActual} posiciones!! ", Toast.LENGTH_LONG).show()
+    }else if(posicionActual > posicionInicial){
+        Toast.makeText(context, "Descendiste ${posicionActual-posicionInicial} posiciones :( ", Toast.LENGTH_LONG).show()
+    }
+}
+
 

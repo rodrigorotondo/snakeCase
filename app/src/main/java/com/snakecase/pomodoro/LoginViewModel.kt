@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.snakecase.DataBaseManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -32,6 +33,8 @@ class LoginViewModel: ViewModel() {
 
     private val _permitirLogin = MutableLiveData<Boolean>()
     val permitirLogin: LiveData<Boolean> = _permitirLogin
+
+    private var posicionUsuario: Int? = null
 
     fun obtenerUserName(): String{
         return email.value?.substringBefore("@") ?: "guest"
@@ -61,7 +64,7 @@ class LoginViewModel: ViewModel() {
             try {
 
                 auth.signInWithEmailAndPassword(email, contrasenia).await()
-
+                crearPosicionLeaderBoard()
                 navController.navigate("pantallaPrincipal")
             } catch (exception: Exception) {
                 Log.d("AuthViewModel", "Error al iniciar sesión: ${exception.message}")
@@ -92,6 +95,7 @@ class LoginViewModel: ViewModel() {
         try {
             if(!_registrandoUsuario.value!!) {
                 auth.createUserWithEmailAndPassword(email, contrasenia)
+                crearPosicionLeaderBoard()
                 navController.navigate("pantallaPrincipal")
             }
 
@@ -107,5 +111,34 @@ class LoginViewModel: ViewModel() {
                     Toast.makeText(context, "Error de Registracion", Toast.LENGTH_LONG).show()}
             }
         }
+    }
+
+    private fun crearPosicionLeaderBoard() {
+        val nombreUsuario = this.obtenerUserName()
+        val  db = DataBaseManager(nombreUsuario)
+        var posicion = 0
+
+        db.obtenerLeaderBoard{ result ->
+            var contar = true
+            val datalist = result.toList().sortedByDescending { it.second }
+
+            for((clave,valor) in datalist){
+                if(clave != nombreUsuario && contar){
+
+                    posicion = posicion + 1
+                }
+                else{
+                    contar = false
+                }
+            }
+
+        }
+        posicionUsuario = posicion
+
+    }
+
+    fun obtenerPosicionInicialLeaderBoard(): Int{
+        return posicionUsuario ?: 0
+
     }
 }

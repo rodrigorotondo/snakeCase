@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.snakecase.DataBaseManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -46,6 +47,7 @@ class VentanaPrincipal : Ventana{
     override var colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
     override var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
     override var idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
+    var cantidadCiclosInicial = 0
 
     @Composable
     fun CrearBoton(
@@ -249,4 +251,6 @@ class VentanaPrincipal : Ventana{
             }
         }
     }
+
+
 }

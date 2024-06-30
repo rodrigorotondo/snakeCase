@@ -45,7 +45,7 @@ class AplicacionPomodoro {
             composable("pantallaCambioAudio") {ventanaCambioAudio.PantallaCambioAudio(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}
             composable("login") { PantallaLogin(navController, loginViewModel)}
             composable("registrarUsuario") { PantallaRegistrarUsuario(navController, loginViewModel)}
-            composable("pantallaLeaderBoard"){ PantallaLeaderBoard(navController, loginViewModel.obtenerUserName())}
+            composable("pantallaLeaderBoard"){ PantallaLeaderBoard(navController, loginViewModel)}
         }
     }
 
