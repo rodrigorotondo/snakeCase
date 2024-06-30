@@ -36,6 +36,7 @@ class AplicacionPomodoro {
         val idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
         val idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
 
+
         NavHost(navController = navController, startDestination = "login") {
             composable("pantallaPrincipal") { ventanaPrincipal.PantallaPrincipal(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio, loginViewModel.obtenerUserName())}
             composable("pantallaColores") { ventanaPersonalizacion.PantallaSeleccionColor(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio) }
@@ -49,3 +50,4 @@ class AplicacionPomodoro {
     }
 
 }
+

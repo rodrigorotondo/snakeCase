@@ -33,7 +33,7 @@ fun PantallaLeaderBoard(navController: NavHostController, nombreUsuario: String)
 
     LaunchedEffect(Unit) {
         val dbManager = DataBaseManager(nombreUsuario)
-        dbManager.obtenerLeadearBoard { result ->
+        dbManager.obtenerLeaderBoard { result ->
             leaderboard = result
             dataList = leaderboard.toList().sortedByDescending { it.second }
         }
@@ -73,11 +73,13 @@ fun LeaderboardItem(username: String, score: Int) {
         Text(
             text = username,
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontFamily = vt323FontFamily
         )
         Text(
             text = score.toString(),
             fontSize = 20.sp,
+            fontFamily = vt323FontFamily,
             color = MaterialTheme.colorScheme.secondary
         )
     }

@@ -1,6 +1,5 @@
 package com.snakecase
 
-import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
@@ -17,7 +16,7 @@ class DataBaseManager(val nombreUsuario: String) {
         Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
     }
 
-    fun obtenerLeadearBoard(onResult: (HashMap<String, Int>) -> Unit) {
+    fun obtenerLeaderBoard(onResult: (HashMap<String, Int>) -> Unit) {
         val leaderBoard: HashMap<String, Int> = HashMap()
         Firebase.firestore.collection("LeaderBoard").orderBy("ciclos").get()
             .addOnSuccessListener { resultado ->
