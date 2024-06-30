@@ -86,11 +86,11 @@ class VentanaPrincipal : Ventana{
                 while (minutos >= 0 || segundos >= 0) {
                     delay(1000)
                     withContext(Dispatchers.Main) {
-                        timerPomodoro.pasa1Segundo(nombreUsuario)
+                        timerPomodoro.pasa1Segundo(nombreUsuario, context)
                         minutos = timerPomodoro.obtenerMinutos()
                         segundos = timerPomodoro.obtenerSegundos()
                         if (minutos == 0 && segundos == 0) {
-                            timerPomodoro.pasa1Segundo(nombreUsuario)
+                            timerPomodoro.pasa1Segundo(nombreUsuario, context)
                             minutos = timerPomodoro.obtenerMinutos()
                             segundos = timerPomodoro.obtenerSegundos()
                             timerPomodoro.pausar()

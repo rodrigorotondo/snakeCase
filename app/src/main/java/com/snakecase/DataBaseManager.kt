@@ -1,5 +1,8 @@
 package com.snakecase
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
@@ -10,12 +13,17 @@ import kotlinx.coroutines.tasks.await
 class DataBaseManager(val nombreUsuario: String) {
 
 
-    fun incrementarCiclos() {
-        val actualizacion = hashMapOf(
-            "ciclos" to FieldValue.increment(1)
-        )
-        Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
+    fun incrementarCiclos(context: Context) {
+        try {
+
+            val actualizacion = hashMapOf(
+                "ciclos" to FieldValue.increment(1)
+            )
+            Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
+        }catch(exception: Exception){
+            Toast.makeText(context, "Hubo un error y no pudimos actualizar tu score :(", Toast.LENGTH_LONG).show()}
     }
+
 
     suspend fun obtenerLeaderBoard(): HashMap<String, Int> {
         val leaderBoard: HashMap<String, Int> = HashMap()

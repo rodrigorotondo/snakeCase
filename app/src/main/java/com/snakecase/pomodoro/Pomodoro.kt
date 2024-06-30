@@ -1,5 +1,6 @@
 package com.snakecase.pomodoro
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -17,14 +18,15 @@ data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
     var descansoTime by mutableIntStateOf(5)
     var descansoLargoTime by mutableIntStateOf(20)
 
+
     fun obtenerTipoTimer(): TipoTimer {
         return tipoTimer
     }
 
-    fun actualizarTipoTimer(nombreUsuario: String) {
+    fun actualizarTipoTimer(nombreUsuario: String, context: Context) {
         if (ciclos < cicloConteo) {
             if (tipoTimer == TipoTimer.ESTUDIO) {
-                incrementarCiclo(nombreUsuario)
+                incrementarCiclo(nombreUsuario, context)
                 tipoTimer = TipoTimer.DESCANSOCORTO
             } else {
                 tipoTimer = TipoTimer.ESTUDIO
@@ -36,22 +38,22 @@ data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
         actualizarMinutosRestantes()
     }
 
-    fun incrementarCiclo(nombreUsuario: String) {
+    fun incrementarCiclo(nombreUsuario: String, context: Context) {
         ciclos = ciclos + 1
         if(nombreUsuario != "guest"){
             val DBManager = DataBaseManager(nombreUsuario)
-            DBManager.incrementarCiclos()
+            DBManager.incrementarCiclos(context)
         }
     }
 
-    fun pasa1Segundo(nombreUsuario: String) {
+    fun pasa1Segundo(nombreUsuario: String, context: Context) {
         if (segundosRestantes > 0) {
             segundosRestantes -= 1
         } else if (minutosRestantes > 0) {
             minutosRestantes -= 1
             segundosRestantes = 59
         } else {
-            actualizarTipoTimer(nombreUsuario)
+            actualizarTipoTimer(nombreUsuario, context)
         }
     }
 
