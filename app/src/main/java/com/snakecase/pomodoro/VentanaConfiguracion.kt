@@ -38,7 +38,7 @@ class VentanaConfiguracion() : Ventana {
     override var colorTexto = Ventana.ColorTexto(Color.Black)
     override var colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
     override var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
-    override var idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
+    override var idAudio = Ventana.IdAudioPomodoro(R.raw.bubblegum)
 
     @Composable
     fun ConfigSlider(label: String, initialValue: Int, onValueChange: (Int) -> Unit, range: IntRange, step: Int) {

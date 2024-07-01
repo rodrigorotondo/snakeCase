@@ -32,7 +32,7 @@ class VentanaCambioAudio() : Ventana{
     override var colorTexto = Ventana.ColorTexto(Color.Black)
     override var colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
     override var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
-    override var idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
+    override var idAudio = Ventana.IdAudioPomodoro(R.raw.bubblegum)
 
     @Composable
     fun CrearBotonIndividualCambioAudio(textoBoton : String, id : Int) {
@@ -54,12 +54,14 @@ class VentanaCambioAudio() : Ventana{
     @Composable
     fun crearBotonesCambioAudio() {
 
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 1             >>", id = R.raw.alarma1)
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 2             >>", id = R.raw.alarma1)
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 3             >>", id = R.raw.alarma1)
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 4             >>", id = R.raw.alarma1)
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 5             >>", id = R.raw.alarma1)
-        CrearBotonIndividualCambioAudio(textoBoton = "Audio 6             >>", id = R.raw.alarma1)
+        CrearBotonIndividualCambioAudio(textoBoton = "BubbleGum            >>", id = R.raw.bubblegum)
+        CrearBotonIndividualCambioAudio(textoBoton = "CutePop              >>", id = R.raw.cutepop)
+        CrearBotonIndividualCambioAudio(textoBoton = "GhemJanDi            >>", id = R.raw.ghemjandi)
+        CrearBotonIndividualCambioAudio(textoBoton = "LovelyWhisper        >>", id = R.raw.lovelywhisperer)
+        CrearBotonIndividualCambioAudio(textoBoton = "NightCity            >>", id = R.raw.nightcity)
+        CrearBotonIndividualCambioAudio(textoBoton = "ShootingStar         >>", id = R.raw.shootingstar)
+        CrearBotonIndividualCambioAudio(textoBoton = "SleepyCat            >>", id = R.raw.sleepycat)
+        CrearBotonIndividualCambioAudio(textoBoton = "StrawberryMilkshake  >>", id = R.raw.strawberrymilkshake)
     }
 
     @Composable

@@ -34,7 +34,7 @@ class AplicacionPomodoro {
         val colorTexto = Ventana.ColorTexto(Color.Black)
         val colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
         val idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
-        val idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
+        val idAudio = Ventana.IdAudioPomodoro(R.raw.bubblegum)
 
 
         NavHost(navController = navController, startDestination = "login") {

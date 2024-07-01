@@ -46,7 +46,7 @@ class VentanaPrincipal : Ventana{
     override var colorTexto = Ventana.ColorTexto(Color.Black)
     override var colorVentanaConfiguracion = Ventana.ColorVentana(Color.White)
     override var idImagenPrincipalPomodoro = Ventana.IdImagenPomodoro(R.drawable.tomate_study)
-    override var idAudio = Ventana.IdAudioPomodoro(R.raw.alarma1)
+    override var idAudio = Ventana.IdAudioPomodoro(R.raw.bubblegum)
     var cantidadCiclosInicial = 0
 
     @Composable
@@ -79,7 +79,7 @@ class VentanaPrincipal : Ventana{
         var minutos by remember { mutableIntStateOf(timerPomodoro.obtenerMinutos()) }
         var segundos by remember { mutableIntStateOf(timerPomodoro.obtenerSegundos()) }
         var timerActivo by remember { mutableStateOf(!timerPomodoro.enPausa()) }
-        val reproductorSonido = MediaPlayer.create(context, R.raw.alarma1)
+        val reproductorSonido = MediaPlayer.create(context, R.raw.bubblegum)
 
         LaunchedEffect(timerActivo) {
             if (timerActivo) {
@@ -213,9 +213,9 @@ class VentanaPrincipal : Ventana{
     fun CrearBotonLeaderBoard(navController: NavHostController){
         IconButton(onClick = { navController.navigate("pantallaLeaderBoard") },
             modifier = Modifier
-                .offset(x=320.dp).padding(top = 41.dp, end = 16.dp)
+                .offset(x=300.dp).padding(top = 41.dp, end = 16.dp)
                 .size(100.dp)) {
-            Image(painter = painterResource(id = R.drawable.leaderboard3), contentDescription ="Imagen de leaderBoard", modifier = Modifier.size(70.dp))
+            Image(painter = painterResource(id = R.drawable.leaderboard3), contentDescription ="Imagen de leaderBoard", modifier = Modifier.size(65.dp))
 
         }
     }

@@ -1,10 +1,8 @@
 package com.snakecase.pomodoro
 
-
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -53,10 +55,23 @@ fun PantallaLeaderBoard(navController: NavHostController, viewModel: LoginViewMo
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "LeaderBoard:",
-            style = MaterialTheme.typography.titleLarge
-        )
+        Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Button(
+                onClick = { navController.navigate("pantallaPrincipal") },
+                colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
+                modifier = Modifier.offset(x = -160.dp, y = 0.dp)
+            ) {
+                Text("  << Volver", fontFamily = vt323FontFamily, style = TextStyle(fontSize = 20.sp))
+            }
+            Text(
+                text = "LeaderBoard",
+                modifier = Modifier.offset(x = 0.dp, y = 40.dp),
+                style = TextStyle(
+                    fontFamily = vt323FontFamily,
+                    fontSize = 20.sp
+                )
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -68,6 +83,7 @@ fun PantallaLeaderBoard(navController: NavHostController, viewModel: LoginViewMo
             }
         }
     }
+
 }
 
 @Composable
