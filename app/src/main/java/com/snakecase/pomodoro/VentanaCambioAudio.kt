@@ -54,14 +54,13 @@ class VentanaCambioAudio() : Ventana{
     @Composable
     fun crearBotonesCambioAudio() {
 
-        CrearBotonIndividualCambioAudio(textoBoton = "BubbleGum            >>", id = R.raw.bubblegum)
-        CrearBotonIndividualCambioAudio(textoBoton = "CutePop              >>", id = R.raw.cutepop)
-        CrearBotonIndividualCambioAudio(textoBoton = "GhemJanDi            >>", id = R.raw.ghemjandi)
-        CrearBotonIndividualCambioAudio(textoBoton = "LovelyWhisper        >>", id = R.raw.lovelywhisperer)
-        CrearBotonIndividualCambioAudio(textoBoton = "NightCity            >>", id = R.raw.nightcity)
-        CrearBotonIndividualCambioAudio(textoBoton = "ShootingStar         >>", id = R.raw.shootingstar)
-        CrearBotonIndividualCambioAudio(textoBoton = "SleepyCat            >>", id = R.raw.sleepycat)
-        CrearBotonIndividualCambioAudio(textoBoton = "StrawberryMilkshake  >>", id = R.raw.strawberrymilkshake)
+        CrearBotonIndividualCambioAudio(textoBoton = "BubbleGum                        >>", id = R.raw.bubblegum)
+        CrearBotonIndividualCambioAudio(textoBoton = "CutePop                          >>", id = R.raw.cutepop)
+        CrearBotonIndividualCambioAudio(textoBoton = "GhemJanDi                        >>", id = R.raw.ghemjandi)
+        CrearBotonIndividualCambioAudio(textoBoton = "LovelyWhisper                    >>", id = R.raw.lovelywhisperer)
+        CrearBotonIndividualCambioAudio(textoBoton = "NightCity                        >>", id = R.raw.nightcity)
+        CrearBotonIndividualCambioAudio(textoBoton = "ShootingStar                     >>", id = R.raw.shootingstar)
+        CrearBotonIndividualCambioAudio(textoBoton = "SleepyCat                        >>", id = R.raw.sleepycat)
     }
 
     @Composable
@@ -73,7 +72,6 @@ class VentanaCambioAudio() : Ventana{
 
         Column(modifier = Modifier
             .padding(top = 25.dp)
-            .offset(x = 0.dp, y = -50.dp)
             .fillMaxSize()
             .drawBrightnessOverlay(brilloVentana.getBrillos())
             .background(color = colorVentanaConfiguracion.getColorVentana()),
@@ -83,21 +81,21 @@ class VentanaCambioAudio() : Ventana{
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Button(onClick = {navController.navigate("pantallaColores")},
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black),
-                    modifier = Modifier.offset(x = -140.dp, y = -30.dp))
+                    modifier = Modifier.offset(x = -150.dp, y = -50.dp))
                 {
                     Text("<< Volver",modifier = Modifier.offset(x = 0.dp,y = 0.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
                         style = TextStyle(fontSize = 18.sp)
                     )
 
                 }
-                Text("Cambiar Audio",modifier = Modifier.offset(x = 10.dp, y = -20.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
+                Text("Cambiar Audio",modifier = Modifier.offset(x = 0.dp, y = -40.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
                     style = TextStyle(fontSize = 18.sp)
                 )
 
             }
-            Text(text = "  Seleccine el Tono del pomodoro  ", color = Color.Black,
+            Text(text = "  Seleccine Audio del Pomodoro  ", color = Color.Black,
                 modifier = Modifier
-                    .offset(x = 6.dp)
+                    .offset(x = 6.dp, y = -20.dp)
                     .border(2.dp, color = Color.Gray),
                 fontFamily = vt323FontFamily,
                 style = TextStyle(fontSize = 25.sp, background = Color.LightGray),

@@ -56,12 +56,12 @@ class VentanaCambioImagen() : Ventana {
     @Composable
     fun crearBotonesCambioImagen() {
 
-        crearBotonIndividualCambioImagen(textoBoton = "Tomate estudiando 1             >>", idImagen = R.drawable.tomate_study)
-        crearBotonIndividualCambioImagen(textoBoton = "Tomate estudiando 2             >>", idImagen = R.drawable.tomate_study_2)
+        crearBotonIndividualCambioImagen(textoBoton = "Tomate estudiando 1              >>", idImagen = R.drawable.tomate_study)
+        crearBotonIndividualCambioImagen(textoBoton = "Tomate estudiando 2              >>", idImagen = R.drawable.tomate_study_2)
         crearBotonIndividualCambioImagen(textoBoton = "Tomate descansando 1             >>", idImagen = R.drawable.tomate_descanso)
         crearBotonIndividualCambioImagen(textoBoton = "Tomate descansando 2             >>", idImagen = R.drawable.tomate_descanso_2)
-        crearBotonIndividualCambioImagen(textoBoton = "Tomate Italiano                 >>", idImagen = R.drawable.tomate_italiano)
-        crearBotonIndividualCambioImagen(textoBoton = "Tomate peleando                 >>", idImagen = R.drawable.tomate_study)
+        crearBotonIndividualCambioImagen(textoBoton = "Tomate Italiano                  >>", idImagen = R.drawable.tomate_italiano)
+        crearBotonIndividualCambioImagen(textoBoton = "Tomate peleando                  >>", idImagen = R.drawable.tomate_study)
     }
 
     @Composable
@@ -73,7 +73,6 @@ class VentanaCambioImagen() : Ventana {
         setearParametros(colorVentanaAux, brilloVentanaAux, timerPomodoroAux, colorTextoAux, colorVentanaConfiguracionAux, idImagenPrincipalPomodoroAux, idAudioAux)
         Column(modifier = Modifier
             .padding(top = 25.dp)
-            .offset(x = 0.dp, y = -50.dp)
             .fillMaxSize()
             .drawBrightnessOverlay(brilloVentana.getBrillos())
             .background(color = colorVentanaConfiguracion.getColorVentana()),
@@ -83,21 +82,21 @@ class VentanaCambioImagen() : Ventana {
             Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Button(onClick = {navController.navigate("pantallaColores")},
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black),
-                    modifier = Modifier.offset(x = -140.dp, y = -30.dp))
+                    modifier = Modifier.offset(x = -150.dp, y = -90.dp))
                 {
                     Text("<< Volver",modifier = Modifier.offset(x = 0.dp,y = 0.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
                         style = TextStyle(fontSize = 18.sp)
                     )
 
                 }
-                Text("Cambiar Imagen",modifier = Modifier.offset(x = 10.dp, y = -20.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
+                Text("Cambiar Imagen",modifier = Modifier.offset(x = 0.dp, y = -80.dp) ,color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
                     style = TextStyle(fontSize = 18.sp)
                 )
 
             }
             Text(text = "  Seleccine Imagen del Pomodoro  ", color = Color.Black,
                 modifier = Modifier
-                    .offset(x = 6.dp)
+                    .offset(x = 6.dp, y = -20.dp)
                     .border(2.dp, color = Color.Gray),
                 fontFamily = vt323FontFamily,
                 style = TextStyle(fontSize = 25.sp, background = Color.LightGray),

@@ -100,6 +100,7 @@ fun LeaderboardItem(username: String, score: Int) {
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = vt323FontFamily
+
         )
         Text(
             text = score.toString(),

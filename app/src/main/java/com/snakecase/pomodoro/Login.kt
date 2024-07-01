@@ -1,11 +1,13 @@
 package com.snakecase.pomodoro
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -18,10 +20,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 
@@ -44,6 +49,12 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel, navController : NavHost
     val permitirLogin: Boolean by viewModel.permitirLogin.observeAsState(initial = false)
     val context = LocalContext.current
     Column(modifier=modifier){
+
+    Text(text = "  Inicio de sesión  ",
+        modifier = Modifier.offset(x = 80.dp),
+        style = TextStyle(fontSize = 25.sp),
+        color = Color.Gray
+    )
         Spacer(modifier = Modifier.padding(16.dp))
         CampoEMail(email) { viewModel.cambioEnCampos(it, contrasenia) }
         Spacer(modifier = Modifier.padding(6.dp))

@@ -86,7 +86,7 @@ class VentanaConfiguracion() : Ventana {
                 Button(
                     onClick = { navController.navigate("pantallaPrincipal") },
                     colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color.Transparent),
-                    modifier = Modifier.offset(x = -160.dp, y = -30.dp)
+                    modifier = Modifier.offset(x = -160.dp, y = -40.dp)
                 ) {
                     Text("  << Volver", color = colorTexto.getColorTexto(), fontFamily = vt323FontFamily,
                         style = TextStyle(fontSize = 20.sp)
@@ -94,7 +94,7 @@ class VentanaConfiguracion() : Ventana {
                 }
                 Text(
                     text = "Configuración",
-                    modifier = Modifier.offset(x = 0.dp, y = -20.dp),
+                    modifier = Modifier.offset(x = 0.dp, y = -30.dp),
                     style = TextStyle(
                         fontFamily = vt323FontFamily,
                         fontSize = 20.sp,
