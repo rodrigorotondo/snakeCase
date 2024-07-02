@@ -118,26 +118,30 @@ class LoginViewModel: ViewModel() {
     }
 
      suspend fun crearPosicionLeaderBoard() {
+
+         posicionUsuario = consultarPosicionActual()
+
+    }
+
+    suspend fun consultarPosicionActual(): Int{
         val nombreUsuario = this.obtenerUserName()
         val  db = DataBaseManager(nombreUsuario)
         var posicion = 0
 
         val leaderboard = db.obtenerLeaderBoard()
-            var contar = true
-            val datalist = leaderboard.toList().sortedByDescending { it.second }
+        var contar = true
+        val datalist = leaderboard.toList().sortedByDescending { it.second }
 
-            for((clave,valor) in datalist){
-                if(clave != nombreUsuario && contar){
+        for((clave,valor) in datalist){
+            if(clave != nombreUsuario && contar){
 
-                    posicion = posicion + 1
-                }
-                else{
-                    contar = false
-                }
+                posicion = posicion + 1
             }
-
-
-        posicionUsuario = posicion
+            else{
+                contar = false
+            }
+        }
+        return posicion
 
     }
 

@@ -7,6 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 import com.snakecase.DataBaseManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
     private var ciclos = 0
     var minutosRestantes = tipoTimer.minutos
@@ -23,10 +26,10 @@ data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
         return tipoTimer
     }
 
-    fun actualizarTipoTimer(nombreUsuario: String, context: Context) {
+    fun actualizarTipoTimer(viewModel: LoginViewModel, context: Context) {
         if (ciclos < cicloConteo) {
             if (tipoTimer == TipoTimer.ESTUDIO) {
-                incrementarCiclo(nombreUsuario, context)
+                incrementarCiclo(viewModel, context)
                 tipoTimer = TipoTimer.DESCANSOCORTO
             } else {
                 tipoTimer = TipoTimer.ESTUDIO
@@ -38,22 +41,43 @@ data class Pomodoro(private var tipoTimer: TipoTimer = TipoTimer.ESTUDIO) {
         actualizarMinutosRestantes()
     }
 
-    fun incrementarCiclo(nombreUsuario: String, context: Context) {
+    fun incrementarCiclo(viewModel: LoginViewModel, context: Context) {
+        val nombreUsuario = viewModel.obtenerUserName()
+        val multiplicador = calcularMultiplicador(viewModel)
         ciclos = ciclos + 1
         if(nombreUsuario != "guest"){
             val DBManager = DataBaseManager(nombreUsuario)
-            DBManager.incrementarCiclos(context)
+            DBManager.incrementarCiclos(context, multiplicador)
         }
     }
 
-    fun pasa1Segundo(nombreUsuario: String, context: Context) {
+    fun calcularMultiplicador(viewModel: LoginViewModel): Int{
+        var posicionesEscaladas = 0
+        var multiplicador = 1
+
+        GlobalScope.launch {
+            posicionesEscaladas = viewModel.obtenerPosicionInicialLeaderBoard() - viewModel.consultarPosicionActual()
+            if(posicionesEscaladas > 0){
+                when{
+                    posicionesEscaladas > 16 -> multiplicador = 4
+                    posicionesEscaladas > 8 -> multiplicador = 3
+                    posicionesEscaladas > 4 -> multiplicador = 2
+                }
+            }
+        }
+        return multiplicador
+
+
+    }
+
+    fun pasa1Segundo(viewModel: LoginViewModel, context: Context) {
         if (segundosRestantes > 0) {
             segundosRestantes -= 1
         } else if (minutosRestantes > 0) {
             minutosRestantes -= 1
             segundosRestantes = 59
         } else {
-            actualizarTipoTimer(nombreUsuario, context)
+            actualizarTipoTimer(viewModel, context)
         }
     }
 

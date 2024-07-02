@@ -199,3 +199,7 @@ replay_pid*
 .cxx
 local.properties
 
+
+app/src/test/java/com/snakecase/pomodoro/utils/Nullsafety.kt
+
+app/src/test/java/com/snakecase/pomodoro/utils/nullsafetyExample.java

@@ -38,7 +38,7 @@ class AplicacionPomodoro {
 
 
         NavHost(navController = navController, startDestination = "login") {
-            composable("pantallaPrincipal") { ventanaPrincipal.PantallaPrincipal(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio, loginViewModel.obtenerUserName())}
+            composable("pantallaPrincipal") { ventanaPrincipal.PantallaPrincipal(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio, loginViewModel)}
             composable("pantallaColores") { ventanaPersonalizacion.PantallaSeleccionColor(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio) }
             composable("pantallaConfiguracion") {ventanaConfiguracion.PantallaConfiguracion(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}
             composable("pantallaCambioImagen") {ventanaCambioImagen.PantallaCambioImagen(navController, colorVentana, brilloVentana, timerPomodoro, colorTexto, colorVentanaConfiguracion, idImagenPrincipalPomodoro, idAudio)}

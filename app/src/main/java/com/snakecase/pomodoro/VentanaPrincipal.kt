@@ -75,7 +75,7 @@ class VentanaPrincipal : Ventana{
     }
 
     @Composable
-    fun CrearBotones(context: Context, nombreUsuario: String) {
+    fun CrearBotones(context: Context, viewModel: LoginViewModel) {
         var minutos by remember { mutableIntStateOf(timerPomodoro.obtenerMinutos()) }
         var segundos by remember { mutableIntStateOf(timerPomodoro.obtenerSegundos()) }
         var timerActivo by remember { mutableStateOf(!timerPomodoro.enPausa()) }
@@ -86,11 +86,11 @@ class VentanaPrincipal : Ventana{
                 while (minutos >= 0 || segundos >= 0) {
                     delay(1000)
                     withContext(Dispatchers.Main) {
-                        timerPomodoro.pasa1Segundo(nombreUsuario, context)
+                        timerPomodoro.pasa1Segundo(viewModel , context)
                         minutos = timerPomodoro.obtenerMinutos()
                         segundos = timerPomodoro.obtenerSegundos()
                         if (minutos == 0 && segundos == 0) {
-                            timerPomodoro.pasa1Segundo(nombreUsuario, context)
+                            timerPomodoro.pasa1Segundo(viewModel, context)
                             minutos = timerPomodoro.obtenerMinutos()
                             segundos = timerPomodoro.obtenerSegundos()
                             timerPomodoro.pausar()
@@ -223,7 +223,7 @@ class VentanaPrincipal : Ventana{
     @Composable
     fun PantallaPrincipal(navController: NavHostController, colorVentanaAux : Ventana.ColorVentana, brilloVentanaAux : Ventana.BrilloVentana,
                           timerPomodoroAux : Pomodoro, colorTextoAux : Ventana.ColorTexto, colorVentanaConfiguracionAux : Ventana.ColorVentana,
-                          idImagenPrincipalPomodoroAux : Ventana.IdImagenPomodoro, idAudioAux : Ventana.IdAudioPomodoro, nombreUsuario: String
+                          idImagenPrincipalPomodoroAux : Ventana.IdImagenPomodoro, idAudioAux : Ventana.IdAudioPomodoro, viewModel: LoginViewModel
     ) {
         setearParametros(colorVentanaAux, brilloVentanaAux, timerPomodoroAux, colorTextoAux, colorVentanaConfiguracionAux, idImagenPrincipalPomodoroAux, idAudioAux)
         PomodoroTheme {
@@ -244,7 +244,7 @@ class VentanaPrincipal : Ventana{
                     CrearBotonLeaderBoard(navController)
                     CrearImagenTomate()
                     Spacer(modifier = Modifier.height(30.dp))
-                    CrearBotones(context, nombreUsuario)
+                    CrearBotones(context, viewModel)
 
                 }
                 Spacer(modifier = Modifier.height(50.dp))

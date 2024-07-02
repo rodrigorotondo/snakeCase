@@ -13,11 +13,13 @@ import kotlinx.coroutines.tasks.await
 class DataBaseManager(val nombreUsuario: String) {
 
 
-    fun incrementarCiclos(context: Context) {
+    fun incrementarCiclos(context: Context, multiplicador: Int) {
+
+
         try {
 
-            val actualizacion = hashMapOf(
-                "ciclos" to FieldValue.increment(1)
+            val actualizacion: Map<String,Any> = hashMapOf(
+                "ciclos" to FieldValue.increment(multiplicador.toLong())
             )
             Firebase.firestore.collection("LeaderBoard").document(nombreUsuario).set(actualizacion, SetOptions.merge())
         }catch(exception: Exception){

@@ -131,19 +131,13 @@ fun obtenerPosicionActual(lista: List<Pair<String, Int>>, nombreUsuario: String)
 fun crearAvisoPosicion(posicionInicial: Int, posicionActual: Int, context: Context, viewModel: LoginViewModel){
     if(posicionActual < posicionInicial){
         Toast.makeText(context, "Felicidades, avanzaste ${posicionInicial - posicionActual} posiciones!! ", Toast.LENGTH_LONG).show()
-        actualizarPosicion(viewModel)
+
     }else if(posicionActual > posicionInicial){
         Toast.makeText(context, "Descendiste ${posicionActual-posicionInicial} posiciones :( ", Toast.LENGTH_LONG).show()
-        actualizarPosicion(viewModel)
+
     }
 }
 
-private fun actualizarPosicion(viewModel: LoginViewModel){
-    GlobalScope.launch{
 
-        viewModel.crearPosicionLeaderBoard()
-    }
-
-}
 
 
